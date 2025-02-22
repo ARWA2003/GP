@@ -86,8 +86,8 @@ router.post("/register/deaf", async (req, res) => {
       medications,
     } = req.body;
 
-    if (!firstName || !email || !password||!phoneNumber) {
-      return res.status(400).json({ error: "firstName, email,phoneNumber and password are required." });
+    if (!firstName || !email || !password) {
+      return res.status(400).json({ error: "firstName, email and password are required." });
     }
 
     console.log("Checking if user exists..."); // 👈 Debug log

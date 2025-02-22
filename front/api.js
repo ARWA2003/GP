@@ -18,3 +18,14 @@ export const getUserProfile = async (token) => {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
+
+// Send contact message
+export const sendContactMessage = async (formData) => {
+  return axios.post(`${API_URL}/contact`, formData);
+};
+
+// Send contact message
+export const sendFeedbackMessage = async (formData) => {
+  return axios.post(`${API_URL}/feedback`, formData);
+};
+

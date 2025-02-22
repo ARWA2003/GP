@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-
+import {login} from "../../../api"
 const circleAnimation = {
   animate: {
     y: [0, -20, 0],
@@ -41,16 +41,48 @@ const VolunteerLogin = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   if (!validateForm()) return;
+
+  //   setLoading(true);
+  //   setTimeout(() => {
+  //     console.log("Logging in as Volunteer:", formData);
+  //     navigate("/volunteerhomepage");
+  //     setLoading(false);
+  //   }, 2000);
+  // };
+
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
 
     setLoading(true);
-    setTimeout(() => {
-      console.log("Logging in as Volunteer:", formData);
-      navigate("/volunteerhomepage");
+    try {
+      const response = await login(formData); // API call
+      if (response?.data) {
+        const { token, user } = response.data;
+
+        // Store token & role
+        localStorage.setItem("token", token);
+        localStorage.setItem("userRole", user.role);
+
+        console.log("Login successful:", user);
+
+        // Navigate based on role
+        if (user.role === "Volunteer") {
+          navigate("/volunteerhomepage");
+        } else {
+          console.error("Unauthorized access:", user.role);
+        }
+      }
+    } catch (error) {
+      console.error("Login failed:", error);
+      setErrors({ form: error.response?.data?.error || "Login failed. Please try again." });
+    } finally {
       setLoading(false);
-    }, 2000);
+    }
   };
 
   return (

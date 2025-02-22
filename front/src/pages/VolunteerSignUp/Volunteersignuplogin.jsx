@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-
+import { signup } from "../../../api";
 const circleAnimation = {
   animate: {
     y: [0, -20, 0], // Moves up and down
@@ -31,6 +31,7 @@ const VolunteerSignUp = () => {
     gender: "",
     proficiencyLevel: "",
     preferredWork:[],
+    role: "Volunteer",
   });
 
   const handleChange = (e) => {
@@ -74,11 +75,26 @@ const VolunteerSignUp = () => {
   const nextStep = () =>{ if (validateForm()) setStep(step + 1);};
   const prevStep = () => setStep(step - 1);
 
-  const handleSubmit = (e) => {
-    if (validateForm()){
+  // const handleSubmit = (e) => {
+  //   if (validateForm()){
+  //   e.preventDefault();
+  //   console.log("Volunteer Sign Up Data:", formData);
+  //   navigate("/volunteer-login"); // Redirect to Volunteer Login
+  //   }
+  // };
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Volunteer Sign Up Data:", formData);
-    navigate("/volunteer-login"); // Redirect to Volunteer Login
+    if (validateForm()) {
+      try {
+        const response = await signup(formData);
+        console.log("Volunteer Signup Successful:", response.data);
+  
+        alert("Signup successful! You can now log in.");
+        navigate("/volunteer-login");
+      } catch (error) {
+        console.error("Signup failed:", error);
+        setErrors({ form: error.response?.data?.error || "Signup failed. Please try again." });
+      }
     }
   };
 
