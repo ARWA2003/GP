@@ -58,8 +58,8 @@ const JobPortal = () => {
 
   return (
     <>
+      <div className="min-h-screen bg-gradient-to-b from-blue-900 to-blue-500">
     <Upperbar />
-      <div className="min-h-screen bg-gradient-to-b from-blue-900 to-blue-500 text-white relative">
         {/* Header Section */}
         {/* <header className="w-full flex justify-between items-center p-6 relative">
           <img src="/assets/logo123.png" alt="Company Logo" className="h-16" />

@@ -59,7 +59,8 @@ export default function JobListings() {
   const totalPages = Math.ceil(filteredJobs.length / jobsPerPage);
 
   return (
-    <div className="bg-gray-100 min-h-screen">
+    <>
+     <div className="bg-gray-100 min-h-screen">
       <Upperbar/>
       {/* <header className="bg-gradient-to-r from-blue-700 to-blue-500 p-4 flex justify-between items-center text-white">
         <div className="flex items-center gap-3">
@@ -133,7 +134,10 @@ export default function JobListings() {
         </div>
       )}
 
-      <Foooter />
     </div>
+    
+<Foooter />
+    </>
+   
   );
 }

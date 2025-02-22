@@ -17,6 +17,7 @@ import Reels from './pages/Entertainment/Reels.jsx';
 import ShortMovies from './pages/Entertainment/ShortM.jsx';
 import JobPortal from './pages/Jobs/JobPortal.jsx';
 import Careers from './pages/Jobs/Careers.jsx';
+import Profile from './pages/Profile/Profile.jsx';
 const App = () => {
   return (<>
     <Routes>
@@ -38,6 +39,8 @@ const App = () => {
       <Route path="/ShortMovies" element={<ShortMovies />} />
       <Route path="/jobs" element={<JobPortal/>}/>
       <Route path="/careers" element={<Careers/>}/>
+      <Route path="/profile" element={<Profile/>}/>
+
       
 
 
