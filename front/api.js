@@ -13,11 +13,11 @@ export const login = async (credentials) => {
 };
 
 // Fetch user profile
-export const getUserProfile = async (token) => {
-  return axios.get(`${API_URL}/auth/profile`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-};
+// export const getUserProfile = async (token) => {
+//   return axios.get(`${API_URL}/auth/profile`, {
+//     headers: { Authorization: `Bearer ${token}` },
+//   });
+// };
 
 // Send contact message
 export const sendContactMessage = async (formData) => {
