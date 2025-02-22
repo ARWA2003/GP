@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { sendContactMessage } from "../../../api"; // Import the API function
+import Foooter from "../footer/footer";
+import Upperbar from "../Upperbar";
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -28,7 +30,9 @@ const ContactUs = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-gray-100 flex items-center justify-center overflow-hidden">
+    <>
+    <Upperbar/>
+        <div className="relative min-h-screen bg-gray-100 flex items-center justify-center overflow-hidden">
       <div className="absolute w-[400px] h-[400px] bg-yellow-200 rounded-full top-[-150px] left-[-150px] shadow-lg flex items-center justify-center"></div>
       <div className="absolute w-[350px] h-[350px] bg-blue-500 rounded-full bottom-[-100px] right-[-100px]"></div>
       <div className="relative bg-gradient-to-r from-yellow-200 to-blue-500 p-8 rounded-lg shadow-lg z-10 max-w-3xl grid place-items-center">
@@ -82,6 +86,11 @@ const ContactUs = () => {
         </div>
       </div>
     </div>
+    
+    <Foooter />
+
+    </>
+
   );
 };
 
