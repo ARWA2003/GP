@@ -9,7 +9,7 @@ const EmergencyContactSchema = new mongoose.Schema({
   },
   phone: {
     type: String,
-    required: true,
+    required: false,
   },
   relationship: {
     type: String,
@@ -30,7 +30,7 @@ const UserSchema = new mongoose.Schema(
     lastName: { type: String, required: true },
     birthDate: { type: Date },
     email: { type: String, required: true, unique: true },
-    phoneNumber: { type: String, required: true },
+    phoneNumber: { type: String, required: false },
     gender: {
       type: String,
       enum: ["Male", "Female"],

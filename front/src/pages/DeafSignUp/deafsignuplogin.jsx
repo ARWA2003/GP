@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
+import { signup } from "../../../api";
 const circleAnimation = {
   animate: {
     y: [0, -20, 0], // Moves up and down
@@ -16,7 +17,7 @@ const circleAnimation = {
 };
 
 // Common medical conditions
-const medicalConditionsList = [
+const medicalConditionList = [
   "None",
   "Diabetes",
   "Hypertension",
@@ -57,15 +58,21 @@ const DeafSignUp = () => {
     phone: "",
     gender: "",
     emergencyContacts: [{ name: "", phone: "", relationship: "" }],
-    medicalConditions: "",
+    medicalCondition: "",
     bloodType: "",
     medications: "",
+    role: "Deaf/Hard of Hearing",
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    if (name === "medicalCondition" && value !== "Other") {
+      setFormData({ ...formData, medicalCondition: value, otherMedicalCondition: "" });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
+  
 
   const handleEmergencyContactChange = (index, e) => {
     const { name, value } = e.target;
@@ -108,11 +115,12 @@ const DeafSignUp = () => {
     } else if (step === 2) {
       formData.emergencyContacts.forEach((contact, index) => {
         if (!contact.name) newErrors[`emergencyContactName${index}`] = "Name is required";
-        if (!formData.phone.match(/^\d{10,15}$/)) newErrors.phone = "Invalid phone number";
+        if (!contact.phone.match(/^\d{10,15}$/)) newErrors[`emergencyContactPhone${index}`] = "Invalid phone number";
         if (!contact.relationship) newErrors[`emergencyContactRelationship${index}`] = "Relationship is required";
       });
+      
 
-      if (!formData.medicalConditions) newErrors.medicalConditions = "Medical conditions are required";
+      if (!formData.medicalCondition) newErrors.medicalCondition = "Medical conditions are required";
       if (!formData.bloodType) newErrors.bloodType = "Blood type is required";
       if (!formData.medications) newErrors.medications = "Medications are required";
     }
@@ -127,13 +135,36 @@ const DeafSignUp = () => {
 
   const prevStep = () => setStep(step - 1);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      console.log("Form Data:", formData);
-      navigate("/deaf-login");
-    }
-  };
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   if (validateForm()) {
+  //     console.log("Form Data:", formData);
+  //     navigate("/deaf-login");
+  //   }
+  // };
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (!validateForm()) return;
+
+  const finalMedicalCondition = formData.medicalCondition === "Other"
+    ? formData.otherMedicalCondition
+    : formData.medicalCondition;
+
+  const submissionData = { ...formData, medicalCondition: finalMedicalCondition };
+
+  console.log("Submitting:", submissionData); // Debugging
+
+  try {
+    const response = await signup(submissionData);
+    console.log("Signup successful:", response);
+    navigate("/deaf-login");
+  } catch (error) {
+    console.error("Signup failed:", error);
+    setErrors({ general: error.response?.data?.message || "Signup failed. Please try again." });
+  }
+};
+
+  
 
   return (
     <div className="relative min-h-screen bg-gray-100 flex items-center justify-center overflow-hidden">
@@ -226,22 +257,22 @@ const DeafSignUp = () => {
 
                 {/* Medical Conditions Dropdown */}
                 <select
-                  name="medicalConditions"
-                  value={formData.medicalConditions}
+                  name="medicalCondition"
+                  value={formData.medicalCondition}
                   onChange={handleChange}
                   className="w-full p-2 border rounded"
                 >
                   <option value="">Select Medical Condition</option>
-                  {medicalConditionsList.map((condition, index) => (
+                  {medicalConditionList.map((condition, index) => (
                     <option key={index} value={condition}>
                       {condition}
                     </option>
                   ))}
                 </select>
-                {errors.medicalConditions && <p className="text-red-500 text-sm">{errors.medicalConditions}</p>}
+                {errors.medicalCondition && <p className="text-red-500 text-sm">{errors.medicalCondition}</p>}
 
                 {/* Conditional Input for "Other" Medical Condition */}
-                {formData.medicalConditions === "Other" && (
+                {formData.medicalCondition === "Other" && (
                   <input
                     type="text"
                     name="otherMedicalCondition"

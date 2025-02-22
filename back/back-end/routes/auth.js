@@ -40,7 +40,6 @@ router.post("/register/deaf", async (req, res) => {
 
     // Create new Deaf/Hard of Hearing User
     const newUser = new User({
-      role: "Deaf/Hard of Hearing",
       firstName,
       lastName,
       birthDate,
@@ -52,6 +51,7 @@ router.post("/register/deaf", async (req, res) => {
       medicalCondition,
       bloodType,
       medications,
+      role: "Deaf/Hard of Hearing",
     });
 
     await newUser.save();
@@ -61,13 +61,17 @@ router.post("/register/deaf", async (req, res) => {
       user: newUser,
     });
   } catch (error) {
+    console.error("Error during Deaf user registration:", error);
     res.status(500).json({ error: error.message });
   }
+  
 });
 
 // ---------------------- REGISTER VOLUNTEER ----------------------
-router.post("/register/volunteer", async (req, res) => {
+router.post("/register/deaf", async (req, res) => {
   try {
+    console.log("Received Data:", req.body); // 👈 Log the request body
+
     const {
       firstName,
       lastName,
@@ -76,48 +80,56 @@ router.post("/register/volunteer", async (req, res) => {
       phoneNumber,
       gender,
       password,
-      signLanguageLevel,
-      workDays,
+      emergencyContacts,
+      medicalCondition,
+      bloodType,
+      medications,
     } = req.body;
 
-    // Check required fields
-    if (!firstName || !email || !password) {
-      return res.status(400).json({ error: "firstName, email, and password are required." });
+    if (!firstName || !email || !password||!phoneNumber) {
+      return res.status(400).json({ error: "firstName, email,phoneNumber and password are required." });
     }
 
-    // Check if user already exists
+    console.log("Checking if user exists..."); // 👈 Debug log
     const existingUser = await User.findOne({ email });
     if (existingUser) {
+      console.log("User already exists!"); // 👈 Debug log
       return res.status(400).json({ error: "User with this email already exists." });
     }
 
-    // Hash Password
+    console.log("Hashing password..."); // 👈 Debug log
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create new Volunteer User
+    console.log("Creating new user..."); // 👈 Debug log
     const newUser = new User({
-      role: "Volunteer",
       firstName,
       lastName,
       birthDate,
       email,
+      password: hashedPassword,
       phoneNumber,
       gender,
-      password: hashedPassword,
-      signLanguageLevel,
-      workDays,
+      emergencyContacts,
+      medicalCondition,
+      bloodType,
+      medications,
+      role: "Deaf/Hard of Hearing",
     });
 
+    console.log("Saving user to database..."); // 👈 Debug log
     await newUser.save();
 
+    console.log("User created successfully!"); // 👈 Debug log
     res.status(201).json({
-      message: "Volunteer registered successfully",
+      message: "Deaf/Hard of Hearing user registered successfully",
       user: newUser,
     });
   } catch (error) {
+    console.error("Signup Error:", error.message); // 👈 Catch and log errors
     res.status(500).json({ error: error.message });
   }
 });
+
 
 // ---------------------- LOGIN (For Both Roles) ----------------------
 router.post("/login", async (req, res) => {
