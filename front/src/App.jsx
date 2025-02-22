@@ -15,7 +15,8 @@ import Education from './pages/Education/Education.jsx';
 import DeafVolunteerAssistance from './pages/DeafVolunteerAssistance/DeafVolunteerAssistance.jsx';
 import Reels from './pages/Entertainment/Reels.jsx';
 import ShortMovies from './pages/Entertainment/ShortM.jsx';
-
+import JobPortal from './pages/Jobs/JobPortal.jsx';
+import Careers from './pages/Jobs/Careers.jsx';
 const App = () => {
   return (<>
     <Routes>
@@ -35,7 +36,8 @@ const App = () => {
       <Route path="/DeafVolunteerAssistance" element={<DeafVolunteerAssistance />} />
       <Route path="/Reels" element={<Reels />} />
       <Route path="/ShortMovies" element={<ShortMovies />} />
-
+      <Route path="/jobs" element={<JobPortal/>}/>
+      <Route path="/careers" element={<Careers/>}/>
       
 
 
