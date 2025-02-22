@@ -3,6 +3,7 @@ import { Search, MapPin, Briefcase, ArrowRight } from "lucide-react";
 import Foooter from "../footer/footer";
 import { Link } from "react-router-dom";
 import Upperbar from "../Upperbar"
+import { useNavigate } from "react-router-dom";
 
 
 const jobs = [
@@ -51,6 +52,7 @@ const jobs = [
 ];
 
 const JobPortal = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const filteredJobs = jobs.filter((job) =>
     job.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -58,8 +60,8 @@ const JobPortal = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-b from-blue-900 to-blue-500">
     <Upperbar />
+      <div className="min-h-screen bg-gradient-to-b from-blue-900 to-blue-500 text-white relative">
         {/* Header Section */}
         {/* <header className="w-full flex justify-between items-center p-6 relative">
           <img src="/assets/logo123.png" alt="Company Logo" className="h-16" />
@@ -70,22 +72,23 @@ const JobPortal = () => {
         </header> */}
 
         {/* Hero Section */}
-        <div className="text-center mt-10 px-5">
-          <h1 className="text-4xl font-bold">Explore Open Career Opportunities</h1>
-          <p className="mt-2 text-lg">We commit to exceptional company culture and outstanding benefits.</p>
-          <div className="mt-6 flex justify-center w-full max-w-xl mx-auto">
-            <input
-              type="text"
-              placeholder="Find the job that best suits you."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="p-4 w-full rounded-l-lg text-gray-700 border border-gray-300"
-            />
-            <button className="bg-blue-700 text-white px-6 rounded-r-lg flex items-center">
-              <Search size={20} />
-            </button>
-          </div>
-        </div>
+        <div className="text-center px-5 flex flex-col items-center justify-center h-full">
+        <h1 className="text-4xl font-bold">Explore Open Career Opportunities</h1>
+        <p className="mt-2 text-lg">We commit to exceptional company culture and outstanding benefits.</p>
+        <div className="mt-4 flex justify-center w-full max-w-xl mx-auto">
+    <input
+      type="text"
+      placeholder="Find the job that best suits you."
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      className="p-4 w-full rounded-l-lg text-gray-700 border border-gray-300"
+    />
+    <button className="bg-blue-700 text-white px-6 rounded-r-lg flex items-center">
+      <Search size={20} />
+    </button>
+  </div>
+</div>
+
 
         {/* Jobs Section */}
         <div className="max-w-6xl mx-auto py-10 px-5">
@@ -104,7 +107,10 @@ const JobPortal = () => {
                   <MapPin size={16} className="mr-2" />
                   <span>{job.location}</span>
                 </div>
-                <button className="mt-3 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
+                <button 
+                  onClick={() => navigate("/job-details", { state: { job } })}
+                  className="mt-3 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
+                >
                   Apply Now
                 </button>
               </div>
