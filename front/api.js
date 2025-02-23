@@ -7,6 +7,10 @@ export const signup = async (userData) => {
   return axios.post(`${API_URL}/auth/register/deaf`, userData);
 };
 
+export const signupV = async (userData) => {
+  return axios.post(`${API_URL}/auth/register/volunteer`, userData);
+};
+
 // User Login
 export const login = async (credentials) => {
   return axios.post(`${API_URL}/auth/login`, credentials);

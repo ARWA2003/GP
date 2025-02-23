@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { signup } from "../../../api";
+import { signupV } from "../../../api";
 const circleAnimation = {
   animate: {
     y: [0, -20, 0], // Moves up and down
@@ -30,25 +30,26 @@ const VolunteerSignUp = () => {
     phone: "",
     gender: "",
     proficiencyLevel: "",
-    preferredWork:[],
+    workDays:[],
     role: "Volunteer",
   });
-
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-
+  
     if (type === "checkbox") {
-      setFormData((prevState) => ({
-        ...prevState,
-        preferredWork: checked
-          ? [...prevState.preferredWork, value]
-          : prevState.preferredWork.filter((day) => day !== value),
-      }));
+      setFormData((prevState) => {
+        const updatedWorkDays = checked
+          ? [...prevState.workDays, value]
+          : prevState.workDays.filter((day) => day !== value);
+  
+        console.log("Updated workDays:", updatedWorkDays); // Debugging
+        return { ...prevState, workDays: updatedWorkDays };
+      });
     } else {
-      setFormData({ ...formData, [name]: value });
+      setFormData((prevState) => ({ ...prevState, [name]: value }));
     }
   };
-
+  
   const validateForm = () => {
 
     let newErrors = {};
@@ -65,7 +66,7 @@ const VolunteerSignUp = () => {
       if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = "Passwords do not match";
     }else if (step === 2) {
       if (!formData.proficiencyLevel) { newErrors.proficiencyLevel = "Please select your sign language proficiency level.";}
-      if (formData.preferredWork.length === 0) newErrors.preferredWork = "Please select at least one preferred work day";
+      if (formData.workDays.length === 0) newErrors.workDays = "Please select at least one preferred work day";
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -85,10 +86,11 @@ const VolunteerSignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      try {
-        const response = await signup(formData);
-        console.log("Volunteer Signup Successful:", response.data);
+      console.log("Final formData before submission:", formData); // Debugging
   
+      try {
+        const response = await signupV(formData);
+        console.log("Volunteer Signup Successful:", response.data);
         alert("Signup successful! You can now log in.");
         navigate("/volunteer-login");
       } catch (error) {
@@ -97,6 +99,7 @@ const VolunteerSignUp = () => {
       }
     }
   };
+  
 
   return (
     <div className="relative min-h-screen bg-gray-100 flex items-center justify-center overflow-hidden">
@@ -179,9 +182,9 @@ const VolunteerSignUp = () => {
                   <label key={day} className="flex items-center space-x-2">
                     <input
                       type="checkbox"
-                      name="preferredWork"
+                      name="workDays"
                       value={day}
-                      checked={formData.preferredWork.includes(day)}
+                      checked={formData.workDays.includes(day)}
                       onChange={handleChange}
                       className="w-4 h-4"
                     />
@@ -189,7 +192,7 @@ const VolunteerSignUp = () => {
                   </label>
                 ))}
               </div>
-              {errors.preferredWork && <p className="text-red-500">{errors.preferredWork}</p>}
+              {errors.workDays && <p className="text-red-500">{errors.workDays}</p>}
 
 
               <div className="flex justify-between mt-4">

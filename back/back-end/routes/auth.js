@@ -68,7 +68,7 @@ router.post("/register/deaf", async (req, res) => {
 });
 
 // ---------------------- REGISTER VOLUNTEER ----------------------
-router.post("/register/deaf", async (req, res) => {
+router.post("/register/volunteer", async (req, res) => {
   try {
     console.log("Received Data:", req.body); // 👈 Log the request body
 
@@ -80,10 +80,8 @@ router.post("/register/deaf", async (req, res) => {
       phoneNumber,
       gender,
       password,
-      emergencyContacts,
-      medicalCondition,
-      bloodType,
-      medications,
+      signLanguageLevel,
+      workDays,
     } = req.body;
 
     if (!firstName || !email || !password) {
@@ -109,11 +107,9 @@ router.post("/register/deaf", async (req, res) => {
       password: hashedPassword,
       phoneNumber,
       gender,
-      emergencyContacts,
-      medicalCondition,
-      bloodType,
-      medications,
-      role: "Deaf/Hard of Hearing",
+      signLanguageLevel,
+      workDays,
+      role: "Volunteer",
     });
 
     console.log("Saving user to database..."); // 👈 Debug log
