@@ -55,9 +55,9 @@ const DeafSignUp = () => {
     email: "",
     password: "",
     confirmPassword: "",
-    phone: "",
+    phoneNumber: "",
     gender: "",
-    emergencyContacts: [{ name: "", phone: "", relationship: "" }],
+    emergencyContacts: [{ name: "", phoneNumber: "", relationship: "" }],
     medicalCondition: "",
     bloodType: "",
     medications: "",
@@ -85,7 +85,7 @@ const DeafSignUp = () => {
     if (formData.emergencyContacts.length < 3) {
       setFormData({
         ...formData,
-        emergencyContacts: [...formData.emergencyContacts, { name: "", phone: "", relationship: "" }],
+        emergencyContacts: [...formData.emergencyContacts, { name: "", phoneNumber: "", relationship: "" }],
       });
     }
   };
@@ -106,7 +106,7 @@ const DeafSignUp = () => {
       if (!formData.lastName) newErrors.lastName = "Last name is required";
       if (!formData.dob) newErrors.dob = "Date of birth is required";
       if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) newErrors.email = "Invalid email format";
-      if (!formData.phone.match(/^\d{10,15}$/)) newErrors.phone = "Invalid phone number";
+      if (!formData.phoneNumber.match(/^\d{10,15}$/)) newErrors.phoneNumber = "Invalid phoneNumber number";
       if (!formData.gender) newErrors.gender = "Gender is required";
       if (!formData.password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)) {
         newErrors.password = "Password must be at least 8 characters, include uppercase, lowercase, number, and symbol";
@@ -115,7 +115,7 @@ const DeafSignUp = () => {
     } else if (step === 2) {
       formData.emergencyContacts.forEach((contact, index) => {
         if (!contact.name) newErrors[`emergencyContactName${index}`] = "Name is required";
-        if (!contact.phone.match(/^\d{10,15}$/)) newErrors[`emergencyContactPhone${index}`] = "Invalid phone number";
+        if (!contact.phoneNumber.match(/^\d{10,15}$/)) newErrors[`emergencyContactphoneNumber${index}`] = "Invalid phoneNumber number";
         if (!contact.relationship) newErrors[`emergencyContactRelationship${index}`] = "Relationship is required";
       });
       
@@ -201,8 +201,8 @@ const DeafSignUp = () => {
                 {errors.dob && <p className="text-red-500">{errors.dob}</p>}
                 <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} className="w-full p-2 border rounded" />
                 {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
-                <input type="tel" name="phone" placeholder="Phone Number" value={formData.phone} onChange={handleChange} className="w-full p-2 border rounded" />
-                {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
+                <input type="tel" name="phoneNumber" placeholder="phoneNumber Number" value={formData.phoneNumber} onChange={handleChange} className="w-full p-2 border rounded" />
+                {errors.phoneNumber && <p className="text-red-500 text-sm">{errors.phoneNumber}</p>}
                 <div className="flex items-center space-x-4">
                   <label className="text-gray-700 font-medium">Gender:</label>
                   <label className="flex items-center">
@@ -233,8 +233,8 @@ const DeafSignUp = () => {
                     <h3 className="text-lg font-semibold">Emergency Contact {index + 1}</h3>
                     <input type="text" name="name" placeholder="Name" value={contact.name} onChange={(e) => handleEmergencyContactChange(index, e)} className="w-full p-2 border rounded" />
                     {errors[`emergencyContactName${index}`] && <p className="text-red-500 text-sm">{errors[`emergencyContactName${index}`]}</p>}
-                    <input type="tel" name="phone" placeholder="Phone Number" value={contact.phone} onChange={(e) => handleEmergencyContactChange(index, e)} className="w-full p-2 border rounded" />
-                    {errors[`emergencyContactPhone${index}`] && <p className="text-red-500 text-sm">{errors[`emergencyContactPhone${index}`]}</p>}
+                    <input type="tel" name="phoneNumber" placeholder="phoneNumber Number" value={contact.phoneNumber} onChange={(e) => handleEmergencyContactChange(index, e)} className="w-full p-2 border rounded" />
+                    {errors[`emergencyContactphoneNumber${index}`] && <p className="text-red-500 text-sm">{errors[`emergencyContactphoneNumber${index}`]}</p>}
                     <input type="text" name="relationship" placeholder="Relationship" value={contact.relationship} onChange={(e) => handleEmergencyContactChange(index, e)} className="w-full p-2 border rounded" />
                     {errors[`emergencyContactRelationship${index}`] && <p className="text-red-500 text-sm">{errors[`emergencyContactRelationship${index}`]}</p>}
                     {/* Add a delete button for contacts except the first one */}

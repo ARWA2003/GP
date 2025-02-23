@@ -27,7 +27,7 @@ const VolunteerSignUp = () => {
     email: "",
     password: "",
     confirmPassword: "",
-    phone: "",
+    phoneNumber: "",
     gender: "",
     proficiencyLevel: "",
     workDays:[],
@@ -58,7 +58,7 @@ const VolunteerSignUp = () => {
       if (!formData.lastName) newErrors.lastName = "Last name is required";
       if (!formData.dob) newErrors.dob = "Date of birth is required";
       if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) newErrors.email = "Invalid email format";
-      if (!formData.phone.match(/^\d{10,15}$/)) newErrors.phone = "Invalid phone number";
+      if (!formData.phoneNumber.match(/^\d{10,15}$/)) newErrors.phoneNumber = "Invalid phoneNumber number";
       if (!formData.gender) newErrors.gender = "Gender is required";
       if (!formData.password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)) {
         newErrors.password = "Password must be at least 8 characters, include uppercase, lowercase, number, and symbol";
@@ -143,8 +143,8 @@ const VolunteerSignUp = () => {
                 {errors.dob && <p className="text-red-500">{errors.dob}</p>}
                 <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} className="w-full p-2 border rounded" />
                 {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
-                <input type="tel" name="phone" placeholder="Phone Number" value={formData.phone} onChange={handleChange} className="w-full p-2 border rounded"/>
-                {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
+                <input type="tel" name="phoneNumber" placeholder="phoneNumber Number" value={formData.phoneNumber} onChange={handleChange} className="w-full p-2 border rounded"/>
+                {errors.phoneNumber && <p className="text-red-500 text-sm">{errors.phoneNumber}</p>}
                 <div className="flex items-center space-x-4">
                   <label className="text-gray-700 font-medium">Gender:</label>
                   <label className="flex items-center">
