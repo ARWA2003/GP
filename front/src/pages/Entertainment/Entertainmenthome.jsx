@@ -17,10 +17,10 @@ const Entertainmenthome = () => {
       </div>
 
       <div className="max-w-5xl mx-auto py-12 flex flex-col md:flex-row gap-8 px-6">
-        <Link to="/ShortMovies" className="bg-yellow-100 p-6 rounded-lg shadow-md hover:shadow-xl transition transform hover:scale-105 flex-1 text-center">
-          <h2 className="text-3xl font-bold text-blue-700">Short Movies</h2>
+        <Link to="/Entertainment-vid" className="bg-yellow-100 p-6 rounded-lg shadow-md hover:shadow-xl transition transform hover:scale-105 flex-1 text-center">
+          <h2 className="text-3xl font-bold text-blue-700">Entertainment videos</h2>
           <p className="mt-2 text-gray-700">
-            Dive into a collection of inspiring suggestion short movies links, thoughtfully crafted with subtitles and American Sign Language (ASL).
+            Dive into a collection of inspiring different videos crafted with American Sign Language (ASL).
           </p>
           <img src="/assets/shortM.png" alt="Short Movies" className="mt-4 w-60 mx-auto" />
         </Link>

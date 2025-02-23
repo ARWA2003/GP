@@ -19,6 +19,7 @@ import JobPortal from './pages/Jobs/JobPortal.jsx';
 import Careers from './pages/Jobs/Careers.jsx';
 import JobDetails from './pages/Jobs/JobDetails.jsx';
 import Profile from './pages/Profile/Profile.jsx';
+import EntV from './pages/Entertainment/EntV.jsx';
 const App = () => {
   return (<>
     <Routes>
@@ -42,6 +43,7 @@ const App = () => {
       <Route path="/careers" element={<Careers/>}/>
       <Route path="/job-details" element={<JobDetails/>}/>
       <Route path="/profile" element={<Profile/>}/>
+      <Route path="/Entertainment-vid" element={<EntV />} />
 
       
 

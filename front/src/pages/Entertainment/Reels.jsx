@@ -1,75 +1,75 @@
-
+import { useState, useEffect } from "react";
 import Upperbar from "../Upperbar";
 import Foooter from "../footer/footer";
-import { useState } from "react";
+
 const videoData = [
-    "/videos/reel1.mp4",
-    "/videos/video2.mp4",
-    "/videos/video3.mp4",
-    "/videos/video4.mp4",
-    "/videos/video5.mp4",
-    "/videos/video6.mp4",
-    "/videos/video7.mp4",
-    "/videos/video8.mp4",
-  ];
-  
+  "/videos/reel1.mp4",
+  "/videos/vid2.mp4",
+  "/videos/video3.mp4",
+  "/videos/video4.mp4",
+  "/videos/video5.mp4",
+  "/videos/video6.mp4",
+  "/videos/video7.mp4",
+  "/videos/video8.mp4",
+];
 
 const Reels = () => {
-    const [selectedVideo, setSelectedVideo] = useState(null);
-    const [currentIndex, setCurrentIndex] = useState(0);
-  
-    const openVideo = (index) => {
-      setSelectedVideo(videoData[index]);
-      setCurrentIndex(index);
-    };
-  
-    const closeVideo = () => {
-      setSelectedVideo(null);
-    };
-  
-    const nextVideo = () => {
-      const newIndex = (currentIndex + 1) % videoData.length;
-      setSelectedVideo(videoData[newIndex]);
-      setCurrentIndex(newIndex);
-    };
-  
-    const prevVideo = () => {
-      const newIndex = (currentIndex - 1 + videoData.length) % videoData.length;
-      setSelectedVideo(videoData[newIndex]);
-      setCurrentIndex(newIndex);
-    };
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [selectedVideo, setSelectedVideo] = useState(videoData[0]);
 
-    return (
-      <>
-      <Upperbar/>
+  useEffect(() => {
+    setSelectedVideo(videoData[currentIndex]);
+  }, [currentIndex]);
 
-      <div className="p-6 bg-gray-00">
-      <h2 className="text-3xl font-bold text-center text-[#FFC107]">Reels</h2>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
-        {videoData.map((video, index) => (
-          <div
-            key={index}
-            className="bg-[#0078AA] h-40 flex justify-center items-center cursor-pointer hover:scale-105 transition"
-            onClick={() => openVideo(index)}
-          >
-            <span className="text-white font-bold text-xl">Video {index + 1}</span>
-          </div>
-        ))}
+  const nextVideo = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % videoData.length);
+  };
+
+  const prevVideo = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex - 1 < 0 ? videoData.length - 1 : prevIndex - 1
+    );
+  };
+
+  return (
+    <>
+      <Upperbar />
+
+      {/* Page Container */}
+      <div className="flex justify-center items-center h-screen bg-gray-200">
+        
+        {/* Left Arrow */}
+        <button
+          onClick={prevVideo}
+          className="bg-gray-700 text-white p-3 rounded-full text-3xl opacity-70 hover:opacity-100 mr-4"
+        >
+          ⬅
+        </button>
+
+        {/* Video Container */}
+        <div className="relative w-[45vw] h-[80vh] bg-gray-300 rounded-xl shadow-lg flex justify-center items-center">
+          <video
+            src={selectedVideo}
+            controls
+            autoPlay
+            loop
+            className="w-full h-full object-contain rounded-xl"
+          />
+        </div>
+
+        {/* Right Arrow */}
+        <button
+          onClick={nextVideo}
+          className="bg-gray-700 text-white p-3 rounded-full text-3xl opacity-70 hover:opacity-100 ml-4"
+        >
+          ➡
+        </button>
+
       </div>
 
-      {selectedVideo && (
-        <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
-          <button onClick={closeVideo} className="absolute top-4 right-4 text-white text-3xl">&times;</button>
-          <button onClick={prevVideo} className="absolute left-4 text-white text-2xl">&#10094;</button>
-          <video src={selectedVideo} controls autoPlay loop className="w-3/4 h-auto max-h-[90vh]" />
-          <button onClick={nextVideo} className="absolute right-4 text-white text-2xl">&#10095;</button>
-        </div>
-      )}
-    </div>
-
-      <Foooter/>
-     </>
-       );
+      <Foooter />
+    </>
+  );
 };
 
 export default Reels;
