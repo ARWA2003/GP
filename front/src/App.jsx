@@ -20,6 +20,10 @@ import Careers from './pages/Jobs/Careers.jsx';
 import JobDetails from './pages/Jobs/JobDetails.jsx';
 import Profile from './pages/Profile/Profile.jsx';
 import EntV from './pages/Entertainment/EntV.jsx';
+import Etools from './pages/Education/Etools.jsx';
+import Courses from './pages/Education/courses.jsx';
+import Careerhome from './pages/Education/Careerhome..jsx';
+import CareerResume from './pages/Education/Careerresume.jsx';
 const App = () => {
   return (<>
     <Routes>
@@ -44,6 +48,11 @@ const App = () => {
       <Route path="/job-details" element={<JobDetails/>}/>
       <Route path="/profile" element={<Profile/>}/>
       <Route path="/Entertainment-vid" element={<EntV />} />
+      <Route path="/Etools" element={<Etools />} />
+      <Route path="/courses" element={<Courses />} />
+      <Route path="/Careerhome" element={<Careerhome />} />
+      <Route path="/Careercv" element={<CareerResume />} />
+
 
       
 

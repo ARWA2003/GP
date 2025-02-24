@@ -4,9 +4,9 @@ import Upperbar from "../Upperbar";
 import Foooter from "../footer/footer";
 
 const services = [
-    { title: "Sign language learning", image: "/assets/edu2.png", link: "/sign-language", bg: "bg-blue-100" , description: "sign language tutorials for all levels.", imgSize: " w-48 h-48"},
-    { title: "Career Preparation", image: "/assets/edu5.png", link: "/career-prep", bg: "bg-blue-100" , description: "Interview Preparation,Resume templete Writing ,Soft Skills tips.", imgSize: "w-48 h-48"},
-    { title: "Educational Support Tools", image: "/assets/edu6.png", link: "/educational-tools", bg: "bg-blue-100", description: "Apps, software, and other tools for deaf-friendly education.", imgSize: "w-48 h-48" },
+    { title: "Online courses", image: "/assets/edu2.png", link: "/Courses", bg: "bg-blue-100" , description: "Links to free courses in various fields with subtitels or with  sign language explanations.", imgSize: " w-48 h-48"},
+    { title: "Career Preparation", image: "/assets/edu5.png", link: "/Careerhome", bg: "bg-blue-100" , description: "Interview Preparation,Resume templete Writing ,Soft Skills tips.", imgSize: "w-48 h-48"},
+    { title: "Educational Support Tools", image: "/assets/edu6.png", link: "/Etools", bg: "bg-blue-100", description: "Apps, software, and other tools for deaf-friendly education.", imgSize: "w-48 h-48" },
    
   ];
 const Education = () => {
