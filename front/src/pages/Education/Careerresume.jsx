@@ -3,10 +3,10 @@ import Upperbar from "../Upperbar";
 import Foooter from "../footer/footer";
 
 // Define the circle animation
-const circleAnimation = {
+const starAnimation = {
   animate: {
-    y: [0, -20, 0], // Moves up and down
-    scale: [1, 1.1, 1], // Subtle scaling
+    y: [0, -20, 0], 
+    scale: [1, 1.1, 1], 
     transition: {
       duration: 4,
       repeat: Infinity,
@@ -40,17 +40,52 @@ const Careerresume = () => {
       <Upperbar />
       <div className="relative min-h-screen bg-gray-100 p-6 flex flex-col items-center overflow-hidden">
         {/* Animated Circles */}
-        <motion.div 
-          variants={circleAnimation} 
-          animate="animate"
-          className="absolute w-[400px] h-[400px] bg-yellow-200 rounded-full top-[-150px] left-[-150px] shadow-lg"
-        ></motion.div>
-
-        <motion.div
-          variants={circleAnimation}
-          animate="animate"
-          className="absolute w-[350px] h-[350px] bg-blue-500 rounded-full bottom-[-100px] right-[-100px]"
-        ></motion.div>
+        <motion.img
+                  src="/assets/puzzle.png" 
+                  alt="Star"
+                  variants={starAnimation}
+                  animate="animate"
+                  className="absolute w-40 top-[10%] left-[10%] opacity-70"
+                />
+                <motion.img
+                  src="/assets/puzzle.png" 
+                  alt="Star"
+                  variants={starAnimation}
+                  animate="animate"
+                  className="absolute w-40 top-[47%] left-[13%] opacity-70"
+                />
+        
+                <motion.img
+                  src="/assets/puzzle.png"
+                  alt="Star"
+                  variants={starAnimation}
+                  animate="animate"
+                  className="absolute w-40 top-[10%] right-[10%] opacity-70"
+                />
+                <motion.img
+                  src="/assets/puzzle.png"
+                  alt="Star"
+                  variants={starAnimation}
+                  animate="animate"
+                  className="absolute w-40 top-[47%] right-[13%] opacity-70"
+                />
+        
+                <motion.img
+                  src="/assets/puzzle.png"
+                  alt="Star"
+                  variants={starAnimation}
+                  animate="animate"
+                  className="absolute w-40 bottom-[3%] left-[7%] opacity-70"
+                />
+        
+                <motion.img
+                  src="/assets/puzzle.png"
+                  alt="Star"
+                  variants={starAnimation}
+                  animate="animate"
+                  className="absolute w-40 bottom-[3%] right-[7%] opacity-70"
+                />
+        
 
         {/* Content */}
         <div className="relative z-10 w-full max-w-5xl">
