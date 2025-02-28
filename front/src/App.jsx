@@ -24,6 +24,7 @@ import Etools from './pages/Education/Etools.jsx';
 import Courses from './pages/Education/courses.jsx';
 import Careerhome from './pages/Education/Careerhome..jsx';
 import CareerResume from './pages/Education/Careerresume.jsx';
+import TextToSpeechPage from './pages/TextToSpeechPage/TextToSpeechPage.jsx';
 const App = () => {
   return (<>
     <Routes>
@@ -52,6 +53,8 @@ const App = () => {
       <Route path="/courses" element={<Courses />} />
       <Route path="/Careerhome" element={<Careerhome />} />
       <Route path="/Careercv" element={<CareerResume />} />
+      <Route path="/text-to-speech" element={<TextToSpeechPage />} />
+
 
 
       
