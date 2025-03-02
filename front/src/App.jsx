@@ -25,6 +25,14 @@ import Courses from './pages/Education/courses.jsx';
 import Careerhome from './pages/Education/Careerhome..jsx';
 import CareerResume from './pages/Education/Careerresume.jsx';
 import TextToSpeechPage from './pages/TextToSpeechPage/TextToSpeechPage.jsx';
+import ASLlevels from './pages/ASLlearning/ASLlevels.jsx';
+import Beg from './pages/ASLlearning/Beg.jsx';
+import Advanc from './pages/ASLlearning/Advan.jsx';
+import Inter from './pages/ASLlearning/Inter.jsx';
+import HomeEmer from './pages/EmergencyV/HomeEmer.jsx';
+import Emptyemer from './pages/EmergencyV/Emptyemer.jsx';
+import DetailsEme from './pages/EmergencyV/DetailsEme.jsx';
+
 const App = () => {
   return (<>
     <Routes>
@@ -54,6 +62,15 @@ const App = () => {
       <Route path="/Careerhome" element={<Careerhome />} />
       <Route path="/Careercv" element={<CareerResume />} />
       <Route path="/text-to-speech" element={<TextToSpeechPage />} />
+      <Route path="/beginner" element={<Beg/>} />
+      <Route path="/intermediate" element={<Inter />} />
+      <Route path="/advanced" element={<Advanc />} />
+      <Route path="/ASLlevels" element={<ASLlevels />} />
+      <Route path="/EmerRes" element={<HomeEmer />} />
+      <Route path="/Emptyemer" element={<Emptyemer />} />
+      <Route path="/detailsEmer" element={<DetailsEme />} />
+
+
 
 
 

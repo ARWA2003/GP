@@ -5,11 +5,8 @@ import UpperbarV from "../UpperbarV";
 
 
 const services = [
-  { title: "Assistive Technology Support", image: "/assets/Vhome1.png", link: "/Tech-support", bg: "bg-yellow-100" , description: "", imgSize: " w-48 h-48"},
-  { title: "ASL Interpreter", image: "/assets/Vhome2.png", link: "ASL", bg: "bg-blue-100" , description: "", imgSize: "w-48 h-48"},
-  { title: "Event Organizer", image: "/assets/Vhome3.png", link: "/Events", bg: "bg-yellow-100", description: "", imgSize: "w-48 h-48" },
-  { title: "Fundraising/Donations", image: "/assets/Vhome4.png", link: "/FundRaising", bg: "bg-blue-100", description: "", imgSize: "w-48 h-48" },
-  { title: "Emergency Response", image: "/assets/Vhome5.png", link: "/emergency-response", bg: "bg-yellow-100", description: "", imgSize: "w-48 h-48" },
+  { title: "ASL learning", image: "/assets/Vhome2.png", link: "/ASLlevels", bg: "bg-blue-100" , description: "", imgSize: "w-40 h-40"},
+  { title: "Emergency Response", image: "/assets/Vhome5.png", link: "/EmerRes", bg: "bg-yellow-100", description: "", imgSize: "w-48 h-48" },
   
 ];
 const Volunteerhomepage = () => {
@@ -45,7 +42,7 @@ const Volunteerhomepage = () => {
           >
             <img src={service.image} alt={service.title} className="${service.imgSize} object-cover" />
             <div className="p-6 text-center md:text-left">
-              <h3 className="text-xl font-semibold text-gray-800">{service.title}</h3>
+              <h3 className="text-3xl font-semibold text-gray-800">{service.title}</h3>
               <p className="text-gray-600 mt-2">{service.description}</p>
             </div>
           </Link>

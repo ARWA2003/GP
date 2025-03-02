@@ -21,9 +21,9 @@ const UpperbarV = () => {
                     <button className="hover:text-yellow-500">Resources</button>
                     {isServicesOpen && (
                       <div className="absolute top-full left-0 bg-white shadow-lg rounded-md p-2 w-40">
-                        <Link to="/training-material" className="block px-4 py-2 hover:bg-gray-100">Training Material</Link>
-                        <Link to="/event-locations" className="block px-4 py-2 hover:bg-gray-100">Event Locations</Link>
-                        <Link to="/all-resources" className="block px-4 py-2 hover:bg-gray-100">All Resources</Link>
+                        <Link to="/ASLlevels" className="block px-4 py-2 hover:bg-gray-100">ASL learning</Link>
+                        <Link to="/EmerRes" className="block px-4 py-2 hover:bg-gray-100">Emergency responed</Link>
+                        <Link to="/all-resources" className="block px-4 py-2 hover:bg-gray-100">Daily needs</Link>
                       </div>
                     )}
                   </div>
