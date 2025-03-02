@@ -16,7 +16,7 @@ const Chat = () => {
 
       {/* Header Section */}
       <div className="bg-[#F2DF3A] p-10 flex flex-col items-center text-center">
-        <h1 className="text-5xl font-bold text-[#0078AA]">Choose a Volunteer to Chat</h1>
+        <h1 className="text-5xl font-bold text-[#0078AA]">Choose a Volunteer to Chat with</h1>
         <p className="mt-3 text-[#0078AA] font-semibold text-lg">
           Connect with a caring volunteer for support
         </p>

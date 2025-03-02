@@ -11,7 +11,7 @@ const UpperbarV = () => {
                 </div>
         
                 <nav className="flex space-x-6 text-lg font-semibold">
-                  <Link to="/" className="hover:text-yellow-500">Home</Link>
+                  <Link to="/VolunteerHomePage" className="hover:text-yellow-500">Home</Link>
                   
                   <div 
                     className="relative" 
@@ -23,7 +23,7 @@ const UpperbarV = () => {
                       <div className="absolute top-full left-0 bg-white shadow-lg rounded-md p-2 w-40">
                         <Link to="/ASLlevels" className="block px-4 py-2 hover:bg-gray-100">ASL learning</Link>
                         <Link to="/EmerRes" className="block px-4 py-2 hover:bg-gray-100">Emergency responed</Link>
-                        <Link to="/all-resources" className="block px-4 py-2 hover:bg-gray-100">Daily needs</Link>
+                        <Link to="/dailylifeV" className="block px-4 py-2 hover:bg-gray-100">Daily needs</Link>
                       </div>
                     )}
                   </div>

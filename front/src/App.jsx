@@ -37,6 +37,11 @@ import Chat from './pages/DeafVolunteerAssistance/Chat.jsx';
 import ChatInterface from './pages/DeafVolunteerAssistance/ChatInterface.jsx';
 import VideoCallInterface from './pages/DeafVolunteerAssistance/VideoCallInterface.jsx';
 import VideoCall from './pages/DeafVolunteerAssistance/VideoCall.jsx';
+import VolunteerChat from './pages/VolunteerDailyLifeNeeds/VolunteerChat.jsx';
+import VolunteerChatInterface from './pages/VolunteerDailyLifeNeeds/VolunteerChatInterface.jsx';
+import VolunteerVideoCall from './pages/VolunteerDailyLifeNeeds/VolunteerVideoCall.jsx';
+import VolunteerVideoCallInterface from './pages/VolunteerDailyLifeNeeds/VolunteerVideoCallInterface.jsx';
+import DailylifeV from './pages/VolunteerDailyLifeNeeds/DailylifeV.jsx';
 
 const App = () => {
   return (<>
@@ -79,6 +84,11 @@ const App = () => {
       <Route path="/chat-with-volunteer/:id" element={<ChatInterface />} />
       <Route path="/video-call-with-volunteer" element={<VideoCall />} />
       <Route path="/video-call-with-volunteer/:id" element={<VideoCallInterface />} />
+        <Route path="/volunteer-chat" element={<VolunteerChat />} />
+        <Route path="/volunteer-chat-interface/:id" element={<VolunteerChatInterface />} />
+        <Route path="/volunteer-video-call" element={<VolunteerVideoCall />} />
+        <Route path="/volunteer-video-call-interface/:id" element={<VolunteerVideoCallInterface />} />
+        <Route path="/dailylifeV" element={<DailylifeV />} />
 
 
 
