@@ -32,6 +32,11 @@ import Inter from './pages/ASLlearning/Inter.jsx';
 import HomeEmer from './pages/EmergencyV/HomeEmer.jsx';
 import Emptyemer from './pages/EmergencyV/Emptyemer.jsx';
 import DetailsEme from './pages/EmergencyV/DetailsEme.jsx';
+import DailyLifeNeeds from './pages/DeafVolunteerAssistance/Dailylifeneeds.jsx';
+import Chat from './pages/DeafVolunteerAssistance/Chat.jsx';
+import ChatInterface from './pages/DeafVolunteerAssistance/ChatInterface.jsx';
+import VideoCallInterface from './pages/DeafVolunteerAssistance/VideoCallInterface.jsx';
+import VideoCall from './pages/DeafVolunteerAssistance/VideoCall.jsx';
 
 const App = () => {
   return (<>
@@ -69,6 +74,12 @@ const App = () => {
       <Route path="/EmerRes" element={<HomeEmer />} />
       <Route path="/Emptyemer" element={<Emptyemer />} />
       <Route path="/detailsEmer" element={<DetailsEme />} />
+      <Route path="/dailylife" element={<DailyLifeNeeds />} />
+      <Route path="/chat-with-volunteer" element={<Chat />} />
+      <Route path="/chat-with-volunteer/:id" element={<ChatInterface />} />
+      <Route path="/video-call-with-volunteer" element={<VideoCall />} />
+      <Route path="/video-call-with-volunteer/:id" element={<VideoCallInterface />} />
+
 
 
 

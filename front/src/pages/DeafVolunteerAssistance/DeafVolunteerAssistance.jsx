@@ -3,9 +3,9 @@ import Upperbar from "../Upperbar";
 import Foooter from "../footer/footer";
 
 const services = [
-    { title: "Emergency Response", image: "/assets/deafvol4.png", link: "/emergency", bg: "bg-blue-100" , description: "Interview Preparation, Resume Writing, Soft Skills tips.", imgSize: "w-48 h-48"},
-    { title: "Assistive technology support", image: "/assets/deafvol5.png", link: "/tech", bg: "bg-blue-100", description: "Apps, software, and other tools for deaf-friendly education.", imgSize: "w-48 h-48" },
-    { title: "Event organizing", image: "/assets/deafvol6.png", link: "/event", bg: "bg-blue-100", description: "Apps, software, and other tools for deaf-friendly education.", imgSize: "w-48 h-48" },
+   
+   
+    // { title: "Event organizing", image: "/assets/deafvol6.png", link: "/event", bg: "bg-blue-100", description: "Apps, software, and other tools for deaf-friendly education.", imgSize: "w-48 h-48" },
 ];
 
 const DeafVolunteerAssistance = () => {
