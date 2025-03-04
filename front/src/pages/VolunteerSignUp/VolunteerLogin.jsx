@@ -102,7 +102,7 @@ const VolunteerLogin = () => {
 
     
       <div className="relative bg-gradient-to-r from-yellow-200 to-blue-500 p-8 rounded-lg shadow-lg z-10 w-full max-w-3xl grid place-items-center">
-        <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md text-center">
+      <div className="relative bg-white p-8 rounded-lg shadow-lg z-10 w-full max-w-3xl grid place-items-center">
           <img src="../../../public/assets/logo123.png" alt="HearMeOut Logo" className="w-40 h-40 mx-auto" />
 
           <h1 className="text-2xl font-bold text-blue-700 mb-4">Volunteer Login</h1>
