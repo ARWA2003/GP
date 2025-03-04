@@ -42,6 +42,7 @@ import VolunteerChatInterface from './pages/VolunteerDailyLifeNeeds/VolunteerCha
 import VolunteerVideoCall from './pages/VolunteerDailyLifeNeeds/VolunteerVideoCall.jsx';
 import VolunteerVideoCallInterface from './pages/VolunteerDailyLifeNeeds/VolunteerVideoCallInterface.jsx';
 import DailylifeV from './pages/VolunteerDailyLifeNeeds/DailylifeV.jsx';
+import Places from './pages/Places/Places.jsx';
 
 const App = () => {
   return (<>
@@ -89,6 +90,8 @@ const App = () => {
         <Route path="/volunteer-video-call" element={<VolunteerVideoCall />} />
         <Route path="/volunteer-video-call-interface/:id" element={<VolunteerVideoCallInterface />} />
         <Route path="/dailylifeV" element={<DailylifeV />} />
+        <Route path="/places-to-go" element={<Places />} />
+
 
 
 

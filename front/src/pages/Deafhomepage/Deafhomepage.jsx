@@ -10,7 +10,7 @@ const services = [
   { title: "Education", image: "/assets/education-pic.png", link: "/education", bg: "bg-blue-100", description: "Access educational resources and courses for better learning.", imgSize: "w-48 h-48" },
   { title: "Job Opportunities", image: "/assets/job-opp-pic.png", link: "/jobs", bg: "bg-yellow-100", description: "Explore job opportunities tailored for the deaf community.", imgSize: "w-48 h-48" },
   { title: "Entertainment Services", image: "/assets/entertainment-pic.png", link: "/Entertainment-home", bg: "bg-blue-100", description: "Enjoy entertainment services accessible for the deaf.", imgSize: "w-48 h-48" },
-  { title: " places recommendations", image: "/assets/places-pic.png", link: "/places", bg: "bg-yellow-100", description: "Discover deaf-friendly places", imgSize: "w-48 h-48" }
+  { title: " places recommendations", image: "/assets/places-pic.png", link: "/places-to-go", bg: "bg-yellow-100", description: "Discover deaf-friendly places", imgSize: "w-48 h-48" }
 ];
 
 const Deafhomepage = () => {

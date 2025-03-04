@@ -27,7 +27,7 @@ const Upperbar = () => {
               <Link to="/jobs" className="block px-4 py-2 hover:bg-gray-100">Job Opportunities</Link>
               <Link to="/education" className="block px-4 py-2 hover:bg-gray-100">Education</Link>
               <Link to="/Entertainment-home" className="block px-4 py-2 hover:bg-gray-100">Entertainment</Link>
-              <Link to="/entertainment" className="block px-4 py-2 hover:bg-gray-100">deaf-friendly places</Link>
+              <Link to="/places-to-go" className="block px-4 py-2 hover:bg-gray-100">deaf-friendly places</Link>
               <Link to="/DeafVolunteerAssistance" className="block px-4 py-2 hover:bg-gray-100">volunteer assistance</Link>
             </div>
           )}
