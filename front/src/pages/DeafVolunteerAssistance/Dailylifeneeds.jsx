@@ -7,11 +7,15 @@ const DailyLifeNeeds = () => {
     <>
       <Upperbar />
 
-      {/* Header Section */}
       <div className="bg-[#F2DF3A] p-10 flex flex-col items-center text-center">
-        <h1 className="text-5xl font-bold text-[#0078AA]">Daily Life Needs</h1>
+        <h1 className="text-5xl font-bold text-[#0078AA]">Find Support</h1>
+        <img 
+          src="/assets/deafvol1.png" 
+          alt="Sign Language Illustration" 
+          className="w-10/12 md:w-7/12 lg:w-5/12 max-w-lg mt-6"
+        />
         <p className="mt-3 text-[#0078AA] font-semibold text-lg">
-          Choose how you want to connect with a volunteer
+          Connect with a Caring Volunteer
         </p>
       </div>
 

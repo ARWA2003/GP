@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import Upperbar from "../Upperbar";
+import Foooter from "../footer/footer";
 
 export default function Places() {
   const [search, setSearch] = useState("");
@@ -77,6 +78,7 @@ export default function Places() {
           )}
         </div>
       </section>
+      <Foooter/>
     </div>
   );
 }

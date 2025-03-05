@@ -43,9 +43,11 @@ import VolunteerVideoCall from './pages/VolunteerDailyLifeNeeds/VolunteerVideoCa
 import VolunteerVideoCallInterface from './pages/VolunteerDailyLifeNeeds/VolunteerVideoCallInterface.jsx';
 import DailylifeV from './pages/VolunteerDailyLifeNeeds/DailylifeV.jsx';
 import Places from './pages/Places/Places.jsx';
+import ScrollToTop from "./pages/ScrollToTop";
 
 const App = () => {
   return (<>
+  <ScrollToTop />
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/deaf-signup" element={<DeafSignUp />} />

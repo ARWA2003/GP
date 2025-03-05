@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const UpperbarV = () => {
+  const navigate = useNavigate();
     const [isServicesOpen, setIsServicesOpen] = useState(false);
 
     return (
@@ -32,7 +34,12 @@ const UpperbarV = () => {
                   <Link to="/contact" className="hover:text-yellow-500">Contact Us</Link>
                 </nav>
         
-                <img src="/assets/profile.png" alt="Profile" className="h-14 w-auto rounded-full cursor-pointer" />
+                <img
+        src="/assets/profile.png"
+        alt="Profile"
+        className="h-14 w-auto rounded-full cursor-pointer"
+        onClick={() => navigate("/profile")}
+      />
               </header>
     );
 }
