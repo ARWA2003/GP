@@ -46,64 +46,75 @@ const TextToSpeechPage = () => {
     // Text-to-Speech function
     const speakText = (text) => {
         if (!window.speechSynthesis || !text) return;
-
+    
         const synth = window.speechSynthesis;
         const utterance = new SpeechSynthesisUtterance(text);
-        utterance.voice = selectedVoice || voices[0];
+        
+        // Choose voice based on language
+        if (selectedLanguage === "ar-SA") {
+            utterance.voice = voices.find((v) => v.lang.startsWith("ar")) || voices[0];
+        } else {
+            utterance.voice = selectedVoice || voices[0];
+        }
+    
         utterance.rate = speechRate;
         utterance.onstart = () => setIsSpeaking(true);
         utterance.onend = () => setIsSpeaking(false);
         utterance.onerror = (e) => console.error("TTS Error:", e);
+        
         synth.cancel();
         synth.speak(utterance);
     };
+    
 
     // Speech-to-Text function
+    const [selectedLanguage, setSelectedLanguage] = useState("en-US"); // Default is English
+
     const startListening = () => {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!SpeechRecognition) {
             alert("Speech Recognition is not supported in this browser. Try Chrome or Edge.");
             return;
         }
-
+    
         const recognition = new SpeechRecognition();
         recognition.continuous = false;
         recognition.interimResults = false;
-        recognition.lang = "en-US"; // Adjust as needed
-
+        recognition.lang = selectedLanguage; // Use selected language
+    
         recognition.onstart = () => {
             console.log("Speech recognition started");
             setIsListening(true);
         };
-
+    
         recognition.onresult = (event) => {
             const transcript = event.results[0][0].transcript;
             console.log("Transcript received:", transcript);
             setInputText(transcript);
             setIsListening(false);
         };
-
+    
         recognition.onerror = (event) => {
             console.error("STT Error:", event.error);
             setIsListening(false);
             if (event.error === "network") {
                 alert(
-                    "Speech recognition failed due to a network error. Please check your internet connection and ensure no network restrictions are in place."
+                    "Speech recognition failed due to a network error. Please check your internet connection."
                 );
             } else if (event.error === "no-speech") {
                 alert("No speech detected. Please try again.");
             } else if (event.error === "not-allowed") {
-                alert("Microphone access denied. Please allow microphone permissions in your browser settings.");
+                alert("Microphone access denied. Please allow microphone permissions.");
             } else {
                 alert(`Speech recognition error: ${event.error}`);
             }
         };
-
+    
         recognition.onend = () => {
             console.log("Speech recognition ended");
             setIsListening(false);
         };
-
+    
         try {
             recognition.start();
         } catch (error) {
@@ -112,6 +123,7 @@ const TextToSpeechPage = () => {
             alert("Failed to start speech recognition. Please try again.");
         }
     };
+    
 
     // Send message and speak it
     const handleSendMessage = () => {
@@ -235,6 +247,20 @@ const TextToSpeechPage = () => {
                                         </div>
                                     ))}
                                 </div>
+
+                                <div className="flex items-center space-x-2">
+    <label htmlFor="language-select" className="text-black font-bold">Language:</label>
+    <select
+        id="language-select"
+        value={selectedLanguage}
+        onChange={(e) => setSelectedLanguage(e.target.value)}
+        className="p-2 rounded bg-gray-600 text-white"
+    >
+        <option value="en-US">English</option>
+        <option value="ar-SA">العربية (Arabic)</option>
+    </select>
+</div>
+
 
                                 {/* Controls */}
                                 <div className="flex items-center mb-2 space-x-2 p-4">
