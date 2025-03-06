@@ -60,19 +60,40 @@ export default function PlaceDetails() {
 
       <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-          <h2 className="text-xl font-bold">Tickets</h2>
+        <h2 className="text-xl font-bold flex items-center justify-center gap-2">
+              <img
+                src="/assets/Ticket.jpg"
+                alt="Tickets Icon"
+                className="w-6 h-6"
+              />
+              Tickets
+            </h2>
           <p className="bg-gray-200 px-4 py-2 rounded mt-2">Children: {place.tickets.children}</p>
           <p className="bg-gray-300 px-4 py-2 rounded mt-2">Adults: {place.tickets.adults}</p>
         </div>
 
         <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-          <h2 className="text-xl font-bold">Opening Times</h2>
+        <h2 className="text-xl font-bold flex items-center justify-center gap-2">
+              <img
+                src="/assets/Opening.jpeg"
+                alt="Opening Times Icon"
+                className="w-6 h-6"
+              />
+              Opening Times
+            </h2>
           <p className="mt-2">Weekdays: {place.times.weekday}</p>
           <p className="font-bold text-red-500">Weekends: {place.times.weekend}</p>
         </div>
 
         <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-          <h2 className="text-xl font-bold">Location</h2>
+        <h2 className="text-xl font-bold flex items-center justify-center gap-2">
+              <img
+                src="/assets/Location.jpeg"
+                alt="Location Icon"
+                className="w-6 h-6"
+              />
+              Location
+            </h2>
           <p className="mt-2">{place.location}</p>
         </div>
       </div>
