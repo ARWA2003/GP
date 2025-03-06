@@ -3,8 +3,8 @@ import Contact from "../models/Contact.js"; // Ensure correct file extension
 // Add a new contact
 export const addContact = async (req, res) => {
     try {
-        const { name, phone, email } = req.body;
-        const contact = await new Contact({ name, phone, email }).save();
+        const { name } = req.body;
+        const contact = await new Contact({ name }).save();
         res.json({ success: true, contact });
     } catch (error) {
         res.status(500).json({ error: "Failed to add contact." });

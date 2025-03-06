@@ -23,12 +23,12 @@ export const login = async (credentials) => {
 //   });
 // };
 
-// Send contact message
+// contact us page Send contact message to our email for inquiry
 export const sendContactMessage = async (formData) => {
   return axios.post(`${API_URL}/contact`, formData);
 };
 
-// Send contact message
+// contact us page Send contact message to our email for inquiry(footer)
 export const sendFeedbackMessage = async (formData) => {
   return axios.post(`${API_URL}/feedback`, formData);
 };
