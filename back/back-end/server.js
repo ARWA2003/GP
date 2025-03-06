@@ -16,7 +16,7 @@ app.use(express.json());
 // ✅ Add CORS Middleware HERE
 app.use(
   cors({
-    origin: "http://localhost:5173", // Allow React frontend to connect
+    origin: "https://localhost:5173", // Allow React frontend to connect
     credentials: true, // Allow cookies/auth headers if needed
   })
 );

@@ -1,18 +1,14 @@
 import { useState, useEffect } from "react";
 import Foooter from "../footer/footer";
 import Upperbar from "../Upperbar";
+import { getContacts, addContact,  getChatHistory, addChatMessage } from "../../../api"; // Import API functions
 
 const TextToSpeechPage = () => {
-    const [contacts, setContacts] = useState(["supermarket chat", "uber chat", "chat"]);
+    const [contacts, setContacts] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [newContact, setNewContact] = useState("");
     const [selectedContact, setSelectedContact] = useState(null);
-    const [messages, setMessages] = useState({
-        "supermarket chat": [],
-        "uber chat": [],
-        "chat": []
-    });
-
+    const [messages, setMessages] = useState({});
     const [inputText, setInputText] = useState("");
     const [selectedVoice, setSelectedVoice] = useState(null);
     const [voices, setVoices] = useState([]);
@@ -20,20 +16,36 @@ const TextToSpeechPage = () => {
     const [speechRate, setSpeechRate] = useState(1);
     const [isListening, setIsListening] = useState(false);
     const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth > 768);
+    const [selectedLanguage, setSelectedLanguage] = useState("en-US");
 
-    // Initialize voices and handle resize
+    // Fetch initial data and set up voices
     useEffect(() => {
+        const fetchInitialData = async () => {
+            try {
+                const token = localStorage.getItem("token"); 
+                const contactsResponse = await getContacts(token);
+                setContacts(contactsResponse.data.contacts);
+        
+                const chatHistoryResponse = await getChatHistory(token); // Use getChatHistory
+                setMessages(chatHistoryResponse.data.messages);
+            } catch (error) {
+                console.error("Error fetching initial data:", error);
+            }
+        };
+        
+        fetchInitialData();
+
         const synth = window.speechSynthesis;
         const loadVoices = () => {
             const availableVoices = synth.getVoices();
             setVoices(availableVoices);
             if (availableVoices.length > 0 && !selectedVoice) {
-                setSelectedVoice(availableVoices[0]); // Set default voice
+                setSelectedVoice(availableVoices[0]);
             }
         };
 
         synth.onvoiceschanged = loadVoices;
-        loadVoices(); // Initial load
+        loadVoices();
 
         const handleResize = () => setSidebarOpen(window.innerWidth > 768);
         window.addEventListener("resize", handleResize);
@@ -46,108 +58,93 @@ const TextToSpeechPage = () => {
     // Text-to-Speech function
     const speakText = (text) => {
         if (!window.speechSynthesis || !text) return;
-    
+
         const synth = window.speechSynthesis;
         const utterance = new SpeechSynthesisUtterance(text);
-        
-        // Choose voice based on language
-        if (selectedLanguage === "ar-SA") {
-            utterance.voice = voices.find((v) => v.lang.startsWith("ar")) || voices[0];
-        } else {
-            utterance.voice = selectedVoice || voices[0];
-        }
-    
+
+        utterance.voice =
+            selectedLanguage === "ar-SA"
+                ? voices.find((v) => v.lang.startsWith("ar")) || voices[0]
+                : selectedVoice || voices[0];
         utterance.rate = speechRate;
         utterance.onstart = () => setIsSpeaking(true);
         utterance.onend = () => setIsSpeaking(false);
         utterance.onerror = (e) => console.error("TTS Error:", e);
-        
+
         synth.cancel();
         synth.speak(utterance);
     };
-    
 
     // Speech-to-Text function
-    const [selectedLanguage, setSelectedLanguage] = useState("en-US"); // Default is English
-
     const startListening = () => {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!SpeechRecognition) {
-            alert("Speech Recognition is not supported in this browser. Try Chrome or Edge.");
+            alert("Speech Recognition is not supported in this browser.");
             return;
         }
-    
+
         const recognition = new SpeechRecognition();
         recognition.continuous = false;
         recognition.interimResults = false;
-        recognition.lang = selectedLanguage; // Use selected language
-    
-        recognition.onstart = () => {
-            console.log("Speech recognition started");
-            setIsListening(true);
-        };
-    
+        recognition.lang = selectedLanguage;
+
+        recognition.onstart = () => setIsListening(true);
         recognition.onresult = (event) => {
             const transcript = event.results[0][0].transcript;
-            console.log("Transcript received:", transcript);
             setInputText(transcript);
             setIsListening(false);
         };
-    
         recognition.onerror = (event) => {
             console.error("STT Error:", event.error);
             setIsListening(false);
-            if (event.error === "network") {
-                alert(
-                    "Speech recognition failed due to a network error. Please check your internet connection."
-                );
-            } else if (event.error === "no-speech") {
-                alert("No speech detected. Please try again.");
-            } else if (event.error === "not-allowed") {
-                alert("Microphone access denied. Please allow microphone permissions.");
-            } else {
-                alert(`Speech recognition error: ${event.error}`);
-            }
+            alert(`Speech recognition error: ${event.error}`);
         };
-    
-        recognition.onend = () => {
-            console.log("Speech recognition ended");
-            setIsListening(false);
-        };
-    
+        recognition.onend = () => setIsListening(false);
+
         try {
             recognition.start();
         } catch (error) {
             console.error("Error starting recognition:", error);
             setIsListening(false);
-            alert("Failed to start speech recognition. Please try again.");
+        }
+    };
+
+    // Send message and save to backend
+    const handleSendMessage = async () => {
+        if (inputText.trim() && selectedContact) {
+            const newMessage = { sender: "You", text: inputText.trim(), isVoice: true };
+            try {
+                const token = localStorage.getItem("token");
+                await addChatMessage(token, { contact: selectedContact, message: newMessage }); // Use addChatMessage
+                setMessages((prev) => ({
+                    ...prev,
+                    [selectedContact]: [...(prev[selectedContact] || []), newMessage],
+                }));
+                speakText(inputText.trim());
+                setInputText("");
+            } catch (error) {
+                console.error("Error sending message:", error);
+            }
         }
     };
     
 
-    // Send message and speak it
-    const handleSendMessage = () => {
-        if (inputText.trim() && selectedContact) {
-            const newMessage = { sender: "You", text: inputText.trim(), isVoice: true };
-            setMessages((prev) => ({
-                ...prev,
-                [selectedContact]: [...prev[selectedContact], newMessage]
-            }));
-            speakText(inputText.trim());
-            setInputText("");
+    // Add new contact
+    const handleAddContact = async () => {
+        if (newContact.trim() && !contacts.includes(newContact.trim())) {
+            try {
+                const token = localStorage.getItem("token");
+                await addContact(token, { name: newContact.trim() });
+                setContacts([...contacts, newContact.trim()]);
+                setMessages((prev) => ({ ...prev, [newContact.trim()]: [] }));
+                setNewContact("");
+            } catch (error) {
+                console.error("Error adding contact:", error);
+            }
         }
     };
 
     const handleSearchChange = (e) => setSearchTerm(e.target.value);
-
-    const handleAddContact = () => {
-        if (newContact.trim() !== "" && !contacts.includes(newContact.trim())) {
-            setContacts([...contacts, newContact.trim()]);
-            setMessages((prev) => ({ ...prev, [newContact.trim()]: [] }));
-            setNewContact("");
-        }
-    };
-
     const filteredContacts = contacts.filter((contact) =>
         contact.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -162,7 +159,6 @@ const TextToSpeechPage = () => {
                         className={`bg-gray-200 fixed md:relative ${
                             sidebarOpen ? "w-64" : "w-0"
                         } transition-all duration-300 overflow-hidden md:block`}
-                        aria-label="Contacts"
                     >
                         {sidebarOpen && (
                             <div className="p-4 h-full flex flex-col">
@@ -175,7 +171,6 @@ const TextToSpeechPage = () => {
                                     value={searchTerm}
                                     onChange={handleSearchChange}
                                     className="w-full p-2 mb-4 rounded border bg-gray-600 text-white"
-                                    aria-label="Search contacts"
                                 />
                                 <div className="max-h-96 overflow-y-auto">
                                     {filteredContacts.map((contact, index) => (
@@ -249,18 +244,19 @@ const TextToSpeechPage = () => {
                                 </div>
 
                                 <div className="flex items-center space-x-2">
-    <label htmlFor="language-select" className="text-black font-bold">Language:</label>
-    <select
-        id="language-select"
-        value={selectedLanguage}
-        onChange={(e) => setSelectedLanguage(e.target.value)}
-        className="p-2 rounded bg-gray-600 text-white"
-    >
-        <option value="en-US">English</option>
-        <option value="ar-SA">العربية (Arabic)</option>
-    </select>
-</div>
-
+                                    <label htmlFor="language-select" className="text-black font-bold">
+                                        Language:
+                                    </label>
+                                    <select
+                                        id="language-select"
+                                        value={selectedLanguage}
+                                        onChange={(e) => setSelectedLanguage(e.target.value)}
+                                        className="p-2 rounded bg-gray-600 text-white"
+                                    >
+                                        <option value="en-US">English</option>
+                                        <option value="ar-SA">العربية (Arabic)</option>
+                                    </select>
+                                </div>
 
                                 {/* Controls */}
                                 <div className="flex items-center mb-2 space-x-2 p-4">
@@ -304,7 +300,6 @@ const TextToSpeechPage = () => {
                                             isListening ? "bg-red-500" : "bg-green-500"
                                         }`}
                                         disabled={isListening}
-                                        title={isListening ? "Listening..." : "Start Speech-to-Text"}
                                     >
                                         {isListening ? "🎙️" : "🎤"}
                                     </button>
@@ -330,7 +325,6 @@ const TextToSpeechPage = () => {
                         )}
                     </main>
                 </div>
-
                 <div className="mb-4">
                     <Foooter />
                 </div>

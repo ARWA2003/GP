@@ -23,13 +23,49 @@ export const login = async (credentials) => {
 //   });
 // };
 
-// contact us page Send contact message to our email for inquiry
+// Send contact message
 export const sendContactMessage = async (formData) => {
   return axios.post(`${API_URL}/contact`, formData);
 };
 
-// contact us page Send contact message to our email for inquiry(footer)
+// Send contact message
 export const sendFeedbackMessage = async (formData) => {
   return axios.post(`${API_URL}/feedback`, formData);
 };
 
+
+
+//related to chats and contacts of tts:
+
+
+// Fetch contacts
+export const getContacts = async (token) => {
+  return axios.get(`${API_URL}/contacts`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+
+// Add a new contact
+export const addContact = async (token, contactData) => {
+  return axios.post(`${API_URL}/contact`, contactData, {
+    headers: { 
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+};
+
+
+// Fetch chat history
+export const getChatHistory = async (token) => {
+  return axios.get(`${API_URL}/chat`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+
+// Add a new chat message
+export const addChatMessage = async (token, messageData) => {
+  return axios.post(`${API_URL}/chat`, messageData, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
