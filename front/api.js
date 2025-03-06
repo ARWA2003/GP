@@ -39,33 +39,22 @@ export const sendFeedbackMessage = async (formData) => {
 
 
 // Fetch contacts
-export const getContacts = async (token) => {
-  return axios.get(`${API_URL}/contacts`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+export const getContacts = async () => {
+  return axios.get(`${API_URL}/contacts`);
 };
 
 // Add a new contact
-export const addContact = async (token, contactData) => {
-  return axios.post(`${API_URL}/contact`, contactData, {
-    headers: { 
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  });
+export const addContact = async (contactData) => {
+  return axios.post(`${API_URL}/contact`, contactData,);
 };
 
 
 // Fetch chat history
-export const getChatHistory = async (token) => {
-  return axios.get(`${API_URL}/chat`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+export const getChatHistory = async () => {
+  return axios.get(`${API_URL}/chat`);
 };
 
 // Add a new chat message
-export const addChatMessage = async (token, messageData) => {
-  return axios.post(`${API_URL}/chat`, messageData, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+export const addChatMessage = async ( messageData) => {
+  return axios.post(`${API_URL}/chat`, messageData,);
 };
