@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { FiSearch } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 import Upperbar from "../Upperbar";
 import Foooter from "../footer/footer";
 
 export default function Places() {
   const [search, setSearch] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("Cafes");
+  const navigate = useNavigate();
 
   const places = [
     { name: "Al Azhar Park", image: "/assets/places/places2.jpeg", category: "Parks" },
@@ -15,7 +16,6 @@ export default function Places() {
     { name: "Al Muizz Street", image: "/assets/places/places1.jpeg", category: "Historical" },
   ];
 
-  // Filtered places based on search input
   const filteredPlaces = places.filter(place =>
     place.name.toLowerCase().includes(search.toLowerCase())
   );
@@ -23,7 +23,6 @@ export default function Places() {
   return (
     <div>
       <Upperbar />
-
       <header
         className="relative p-6"
         style={{
@@ -33,8 +32,8 @@ export default function Places() {
         }}
       >
         <div className="text-center mt-10">
-          <h2 className="text-3xl font-bold">Explore deaf friendly places.</h2>
-          <p className="text-lg mt-2 opacity-80">Lorem ipsum dolor sit amet, consectetur adipis.</p>
+          <h2 className="text-3xl font-bold">Explore deaf-friendly places.</h2>
+          <p className="text-lg mt-2 opacity-80">Find accessible locations around you.</p>
 
           <div className="mt-6 flex justify-center">
             <div className="bg-white p-2 rounded-lg flex items-center w-full max-w-lg">
@@ -45,28 +44,32 @@ export default function Places() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
-              <button className="bg-blue-500 text-white px-4 py-2 rounded-lg flex items-center gap-2">
+              <button
+                className="bg-blue-500 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+                onClick={() => {
+                  const matchedPlace = filteredPlaces[0];
+                  if (matchedPlace) {
+                    navigate(`/PlaceDetails/${encodeURIComponent(matchedPlace.name)}`);
+                  }
+                }}
+              >
                 <FiSearch /> Search
               </button>
             </div>
           </div>
         </div>
-
-        <div className="flex justify-center mt-10">
-          <img src="/assets/places-pic.png" alt="Map" className="h-40" />
-        </div>
       </header>
 
       <section className="container mx-auto p-6">
-        <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold">Most featured places</h2>
-          <a href="#" className="text-blue-500">View all places →</a>
-        </div>
-
+        <h2 className="text-2xl font-bold">Most featured places</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
           {filteredPlaces.length > 0 ? (
             filteredPlaces.map((place, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-lg overflow-hidden">
+              <div
+                key={index}
+                className="bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer hover:shadow-xl transition-shadow duration-300"
+                onClick={() => navigate(`/PlaceDetails/${encodeURIComponent(place.name)}`)}
+              >
                 <img src={place.image} alt={place.name} className="w-full h-32 object-cover" />
                 <div className="p-2">
                   <h3 className="text-sm font-bold">{place.name}</h3>
@@ -78,7 +81,8 @@ export default function Places() {
           )}
         </div>
       </section>
-      <Foooter/>
+
+      <Foooter />
     </div>
   );
 }

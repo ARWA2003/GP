@@ -44,6 +44,7 @@ import VolunteerVideoCallInterface from './pages/VolunteerDailyLifeNeeds/Volunte
 import DailylifeV from './pages/VolunteerDailyLifeNeeds/DailylifeV.jsx';
 import Places from './pages/Places/Places.jsx';
 import ScrollToTop from "./pages/ScrollToTop";
+import PlaceDetails from './pages/Places/PlaceDetails.jsx';
 
 const App = () => {
   return (<>
@@ -93,6 +94,7 @@ const App = () => {
         <Route path="/volunteer-video-call-interface/:id" element={<VolunteerVideoCallInterface />} />
         <Route path="/dailylifeV" element={<DailylifeV />} />
         <Route path="/places-to-go" element={<Places />} />
+        <Route path="/PlaceDetails/:placeName" element={<PlaceDetails />} />
 
 
 
