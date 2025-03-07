@@ -37,7 +37,6 @@ export const sendFeedbackMessage = async (formData) => {
 
 //related to chats and contacts of tts:
 
-
 // Fetch contacts
 export const getContacts = async () => {
   return axios.get(`${API_URL}/contacts`);
@@ -56,5 +55,6 @@ export const getChatHistory = async () => {
 
 // Add a new chat message
 export const addChatMessage = async ( messageData) => {
+  console.log("Calling API:", `${API_URL}/chat`); // Debugging
   return axios.post(`${API_URL}/chat`, messageData,);
 };

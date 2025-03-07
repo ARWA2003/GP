@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Foooter from "../footer/footer";
 import Upperbar from "../Upperbar";
-import { getContacts, addContact,  getChatHistory, addChatMessage } from "../../../api"; // Import API functions
+import { getContacts, addContact, getChatHistory, addChatMessage } from "../../../api";
 
 const TextToSpeechPage = () => {
     const [contacts, setContacts] = useState([]);
@@ -18,22 +18,18 @@ const TextToSpeechPage = () => {
     const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth > 768);
     const [selectedLanguage, setSelectedLanguage] = useState("en-US");
 
-    // Fetch initial data and set up voices
     useEffect(() => {
-        const fetchInitialData = async () => {
+        const fetchContacts = async () => {
             try {
-                const token = localStorage.getItem("token"); 
-                const contactsResponse = await getContacts(token);
-                setContacts(contactsResponse.data.contacts);
-        
-                const chatHistoryResponse = await getChatHistory(token); // Use getChatHistory
-                setMessages(chatHistoryResponse.data.messages);
+                const response = await getContacts();
+                console.log("Backend Response:", response.data); // Log the response
+                setContacts(response.data); // Update state with fetched contacts
             } catch (error) {
-                console.error("Error fetching initial data:", error);
+                console.error("Failed to fetch contacts:", error);
             }
         };
-        
-        fetchInitialData();
+
+        fetchContacts();
 
         const synth = window.speechSynthesis;
         const loadVoices = () => {
@@ -55,17 +51,18 @@ const TextToSpeechPage = () => {
         };
     }, [selectedVoice]);
 
-    // Text-to-Speech function
     const speakText = (text) => {
         if (!window.speechSynthesis || !text) return;
 
         const synth = window.speechSynthesis;
         const utterance = new SpeechSynthesisUtterance(text);
 
-        utterance.voice =
-            selectedLanguage === "ar-SA"
-                ? voices.find((v) => v.lang.startsWith("ar")) || voices[0]
-                : selectedVoice || voices[0];
+        if (selectedLanguage === "ar-SA") {
+            utterance.voice = voices.find((v) => v.lang.startsWith("ar")) || voices[0];
+        } else {
+            utterance.voice = selectedVoice || voices[0];
+        }
+
         utterance.rate = speechRate;
         utterance.onstart = () => setIsSpeaking(true);
         utterance.onend = () => setIsSpeaking(false);
@@ -75,11 +72,10 @@ const TextToSpeechPage = () => {
         synth.speak(utterance);
     };
 
-    // Speech-to-Text function
     const startListening = () => {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!SpeechRecognition) {
-            alert("Speech Recognition is not supported in this browser.");
+            alert("Speech Recognition is not supported in this browser. Try Chrome or Edge.");
             return;
         }
 
@@ -88,65 +84,97 @@ const TextToSpeechPage = () => {
         recognition.interimResults = false;
         recognition.lang = selectedLanguage;
 
-        recognition.onstart = () => setIsListening(true);
+        recognition.onstart = () => {
+            console.log("Speech recognition started");
+            setIsListening(true);
+        };
+
         recognition.onresult = (event) => {
             const transcript = event.results[0][0].transcript;
+            console.log("Transcript received:", transcript);
             setInputText(transcript);
             setIsListening(false);
         };
+
         recognition.onerror = (event) => {
             console.error("STT Error:", event.error);
             setIsListening(false);
-            alert(`Speech recognition error: ${event.error}`);
+            if (event.error === "network") {
+                alert("Speech recognition failed due to a network error. Please check your internet connection.");
+            } else if (event.error === "no-speech") {
+                alert("No speech detected. Please try again.");
+            } else if (event.error === "not-allowed") {
+                alert("Microphone access denied. Please allow microphone permissions.");
+            } else {
+                alert(`Speech recognition error: ${event.error}`);
+            }
         };
-        recognition.onend = () => setIsListening(false);
+
+        recognition.onend = () => {
+            console.log("Speech recognition ended");
+            setIsListening(false);
+        };
 
         try {
             recognition.start();
         } catch (error) {
             console.error("Error starting recognition:", error);
             setIsListening(false);
+            alert("Failed to start speech recognition. Please try again.");
         }
     };
 
-    // Send message and save to backend
     const handleSendMessage = async () => {
         if (inputText.trim() && selectedContact) {
             const newMessage = { sender: "You", text: inputText.trim(), isVoice: true };
             try {
-                const token = localStorage.getItem("token");
-                await addChatMessage(token, { contact: selectedContact, message: newMessage }); // Use addChatMessage
+                await addChatMessage({ message: inputText.trim(), type: "speech" });
                 setMessages((prev) => ({
                     ...prev,
-                    [selectedContact]: [...(prev[selectedContact] || []), newMessage],
+                    [selectedContact]: [...(prev[selectedContact] || []), newMessage], // Ensure it's an array
                 }));
                 speakText(inputText.trim());
                 setInputText("");
             } catch (error) {
-                console.error("Error sending message:", error);
-            }
-        }
-    };
-    
-
-    // Add new contact
-    const handleAddContact = async () => {
-        if (newContact.trim() && !contacts.includes(newContact.trim())) {
-            try {
-                const token = localStorage.getItem("token");
-                await addContact(token, { name: newContact.trim() });
-                setContacts([...contacts, newContact.trim()]);
-                setMessages((prev) => ({ ...prev, [newContact.trim()]: [] }));
-                setNewContact("");
-            } catch (error) {
-                console.error("Error adding contact:", error);
+                console.error("Failed to send message:", error);
             }
         }
     };
 
     const handleSearchChange = (e) => setSearchTerm(e.target.value);
+
+    const handleAddContact = async () => {
+        if (newContact.trim() !== "" && !contacts.includes(newContact.trim())) {
+            try {
+                const response = await addContact({ name: newContact.trim() });
+                setContacts([...contacts, response.data.contact.name]);
+                setMessages((prev) => ({ ...prev, [newContact.trim()]: [] })); // Initialize with empty array
+                setNewContact("");
+            } catch (error) {
+                console.error("Failed to add contact:", error);
+            }
+        }
+    };
+
+    const handleSelectContact = async (contact) => {
+        setSelectedContact(contact);
+        try {
+            const response = await getChatHistory();
+            setMessages((prev) => ({
+                ...prev,
+                [contact]: response.data.map((msg) => ({
+                    sender: "Bot",
+                    text: msg.message,
+                    isVoice: msg.type === "speech",
+                })),
+            }));
+        } catch (error) {
+            console.error("Failed to fetch chat history:", error);
+        }
+    };
+
     const filteredContacts = contacts.filter((contact) =>
-        contact.toLowerCase().includes(searchTerm.toLowerCase())
+        typeof contact === "string" && contact.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
@@ -154,11 +182,11 @@ const TextToSpeechPage = () => {
             <Upperbar />
             <div className="min-h-screen flex flex-col">
                 <div className="flex flex-1">
-                    {/* Sidebar */}
                     <div
                         className={`bg-gray-200 fixed md:relative ${
                             sidebarOpen ? "w-64" : "w-0"
                         } transition-all duration-300 overflow-hidden md:block`}
+                        aria-label="Contacts"
                     >
                         {sidebarOpen && (
                             <div className="p-4 h-full flex flex-col">
@@ -166,25 +194,25 @@ const TextToSpeechPage = () => {
                                     ✖
                                 </button>
                                 <input
-                                    type="text"
-                                    placeholder="Search contacts"
-                                    value={searchTerm}
-                                    onChange={handleSearchChange}
-                                    className="w-full p-2 mb-4 rounded border bg-gray-600 text-white"
-                                />
-                                <div className="max-h-96 overflow-y-auto">
-                                    {filteredContacts.map((contact, index) => (
-                                        <button
-                                            key={index}
-                                            onClick={() => setSelectedContact(contact)}
-                                            className={`block w-full p-2 rounded mb-2 ${
-                                                selectedContact === contact ? "bg-blue-500" : "bg-blue-800"
-                                            } text-white hover:bg-blue-700`}
-                                        >
-                                            {contact}
-                                        </button>
-                                    ))}
-                                </div>
+                type="text"
+                placeholder="Search contacts"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full p-2 mb-4 rounded border bg-gray-600 text-white"
+            />
+                               <div className="max-h-96 overflow-y-auto">
+                {filteredContacts.map((contact, index) => (
+                    <button
+                        key={index}
+                        onClick={() => setSelectedContact(contact)}
+                        className={`block w-full p-2 rounded mb-2 ${
+                            selectedContact === contact ? "bg-blue-500" : "bg-blue-800"
+                        } text-white hover:bg-blue-700`}
+                    >
+                        {contact}
+                    </button>
+                ))}
+            </div>
                                 <div className="mt-4">
                                     <input
                                         type="text"
@@ -204,7 +232,6 @@ const TextToSpeechPage = () => {
                         )}
                     </div>
 
-                    {/* Sidebar Toggle Button */}
                     {!sidebarOpen && (
                         <button
                             onClick={() => setSidebarOpen(true)}
@@ -214,7 +241,6 @@ const TextToSpeechPage = () => {
                         </button>
                     )}
 
-                    {/* Main Chat Area */}
                     <main className="flex-1 bg-yellow-100 p-4 text-white flex flex-col">
                         {selectedContact ? (
                             <>
@@ -244,9 +270,7 @@ const TextToSpeechPage = () => {
                                 </div>
 
                                 <div className="flex items-center space-x-2">
-                                    <label htmlFor="language-select" className="text-black font-bold">
-                                        Language:
-                                    </label>
+                                    <label htmlFor="language-select" className="text-black font-bold">Language:</label>
                                     <select
                                         id="language-select"
                                         value={selectedLanguage}
@@ -258,7 +282,6 @@ const TextToSpeechPage = () => {
                                     </select>
                                 </div>
 
-                                {/* Controls */}
                                 <div className="flex items-center mb-2 space-x-2 p-4">
                                     <button
                                         onClick={() => speakText(inputText)}
@@ -292,39 +315,43 @@ const TextToSpeechPage = () => {
                                     <span>{speechRate}x</span>
                                 </div>
 
-                                {/* Message Input with STT */}
                                 <div className="p-4 flex items-center gap-2 w-full">
-                                    <button
-                                        onClick={startListening}
-                                        className={`p-2 rounded ${
-                                            isListening ? "bg-red-500" : "bg-green-500"
-                                        }`}
-                                        disabled={isListening}
-                                    >
-                                        {isListening ? "🎙️" : "🎤"}
-                                    </button>
-                                    <input
-                                        type="text"
-                                        placeholder="Type or speak your message..."
-                                        value={inputText}
-                                        onChange={(e) => setInputText(e.target.value)}
-                                        onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-                                        className="flex-1 p-2 rounded border bg-gray-600 text-white"
-                                    />
-                                    <button
-                                        onClick={handleSendMessage}
-                                        className="bg-blue-500 p-2 rounded hover:bg-blue-600"
-                                        disabled={!inputText.trim()}
-                                    >
-                                        Send
-                                    </button>
-                                </div>
+        <button
+            onClick={startListening}
+            className={`p-2 rounded ${
+                isListening ? "bg-red-500" : "bg-green-500"
+            }`}
+            disabled={isListening}
+            title={isListening ? "Listening..." : "Start Speech-to-Text"}
+        >
+            {isListening ? "🎙️" : "🎤"}
+        </button>
+        <input
+            type="text"
+            placeholder="Type or speak your message..."
+            value={inputText}
+            onChange={(e) => {
+                console.log("Input changed:", e.target.value); // Debugging
+                setInputText(e.target.value);
+            }}
+            onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
+            className="flex-1 p-2 rounded border bg-gray-600 text-white"
+        />
+        <button
+            onClick={handleSendMessage}
+            className="bg-blue-500 p-2 rounded hover:bg-blue-600"
+            disabled={!inputText.trim()}
+        >
+            Send
+        </button>
+    </div>
                             </>
                         ) : (
                             <p className="text-black">Select a contact to start chatting</p>
                         )}
                     </main>
                 </div>
+
                 <div className="mb-4">
                     <Foooter />
                 </div>

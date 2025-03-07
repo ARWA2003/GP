@@ -4,6 +4,9 @@ import Contact from "../models/Contact.js"; // Ensure correct file extension
 export const addContact = async (req, res) => {
     try {
         const { name } = req.body;
+        if (!name) {
+            return res.status(400).json({ error: "Name is required" });
+        }
         const contact = await new Contact({ name }).save();
         res.json({ success: true, contact });
     } catch (error) {
@@ -14,8 +17,9 @@ export const addContact = async (req, res) => {
 // Get all contacts
 export const getContacts = async (req, res) => {
     try {
-        const contacts = await Contact.find();
-        res.json(contacts);
+        const contacts = await Contact.find(); // Fetch all contacts from the database
+        const contactNames = contacts.map((contact) => contact.name); // Extract names
+        res.json(contactNames); // Send array of contact names
     } catch (error) {
         res.status(500).json({ error: "Failed to fetch contacts." });
     }

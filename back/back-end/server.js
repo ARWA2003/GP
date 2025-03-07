@@ -3,8 +3,10 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import authRoutes from "./routes/auth.js";
-import contactRoutes from "./routes/contact.js";
+//import contactRoutes from "./routes/contact.js";
 import feedbackRoutes from "./routes/feedbackRoutes.js";
+import contactRoutes from "./routes/ChatcontactRoutes.js"; // Ensure this import is correct
+
 
 dotenv.config();
 
@@ -39,3 +41,4 @@ mongoose
 
 const PORT = process.env.PORT || 5002;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+

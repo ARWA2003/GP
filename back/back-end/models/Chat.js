@@ -17,3 +17,4 @@ chatSchema.pre("save", async function (next) {
 
 const Chat = mongoose.model("Chat", chatSchema);
 export default Chat;
+

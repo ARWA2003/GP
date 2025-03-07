@@ -14,13 +14,14 @@ export const getChatHistory = async (req, res) => {
 export const addChatMessage = async (req, res) => {
     try {
         const { message, type } = req.body;
-        if (!message) return res.status(400).json({ error: "Message is required" });
-
+        if (!message) {
+            return res.status(400).json({ error: "Message is required" });
+        }
         const newChat = new Chat({ message, type });
         await newChat.save();
-
         res.json({ success: true, chat: newChat });
     } catch (error) {
         res.status(500).json({ error: "Failed to save message." });
     }
 };
+
