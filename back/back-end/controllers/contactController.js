@@ -1,5 +1,5 @@
 import Contact from "../models/Contact.js"; // Ensure correct file extension
-
+import conmsgs from "../models/conmsgs.js";
 // Add a new contact
 export const addContact = async (req, res) => {
     try {
@@ -17,14 +17,13 @@ export const addContact = async (req, res) => {
 // Get all contacts
 export const getContacts = async (req, res) => {
     try {
-        const contacts = await Contact.find(); // Fetch all contacts from the database
-        const contactNames = contacts.map((contact) => contact.name); // Extract names
-        res.json(contactNames); // Send array of contact names
+        const contacts = await conmsgs.find({}, { contactName: 1, _id: 0 }); // Fetch only contact names
+        console.log("Fetched Contacts:", contacts); // Log the fetched contacts
+        res.json(contacts);
     } catch (error) {
         res.status(500).json({ error: "Failed to fetch contacts." });
     }
 };
-
 // Update contact
 export const updateContact = async (req, res) => {
     try {

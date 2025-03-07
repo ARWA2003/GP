@@ -49,8 +49,8 @@ export const addContact = async (contactData) => {
 
 
 // Fetch chat history
-export const getChatHistory = async () => {
-  return axios.get(`${API_URL}/chat`);
+export const getChatHistory = async (contactName) => {
+  return axios.get(`${API_URL}/chat`, { params: { contactName } });
 };
 
 // Add a new chat message
