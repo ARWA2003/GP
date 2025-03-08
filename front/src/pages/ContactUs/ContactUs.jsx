@@ -2,8 +2,17 @@ import { useState } from "react";
 import { sendContactMessage } from "../../../api"; // Import the API function
 import Foooter from "../footer/footer";
 import Upperbar from "../Upperbar";
+import { useEffect} from "react";
+import UpperbarV from "../UpperbarV";
 
 const ContactUs = () => {
+   const [userRole, setUserRole] = useState(null);
+  
+    useEffect(() => {
+      const role = localStorage.getItem("userRole");
+      setUserRole(role);
+    }, []);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -31,7 +40,7 @@ const ContactUs = () => {
 
   return (
     <>
-    <Upperbar/>
+   {userRole === "Deaf/Hard of Hearing" ? <Upperbar /> : userRole === "Volunteer" ? <UpperbarV /> : null}
         <div className="relative min-h-screen bg-gray-100 flex items-center justify-center overflow-hidden">
       <div className="absolute w-[400px] h-[400px] bg-yellow-200 rounded-full top-[-150px] left-[-150px] shadow-lg flex items-center justify-center"></div>
       <div className="absolute w-[350px] h-[350px] bg-blue-500 rounded-full bottom-[-100px] right-[-100px]"></div>

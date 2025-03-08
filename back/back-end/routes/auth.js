@@ -163,4 +163,27 @@ router.post("/login", async (req, res) => {
   }
 });
 
+// Backend: Express Route (Node.js)
+router.get("/deaf/profile/:email", async (req, res) => {
+  try {
+    const { email } = req.params;
+    console.log("Fetching profile for:", email); // Debugging
+
+    const deafUser = await User.findOne({ email }).select("-password"); 
+
+    if (!deafUser) {
+      console.log("User not found for email:", email);
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json(deafUser);
+  } catch (error) {
+    console.error("Error fetching profile:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+
+
+
 export default router;

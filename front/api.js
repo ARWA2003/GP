@@ -58,3 +58,8 @@ export const addChatMessage = async ( messageData) => {
   console.log("Calling API:", `${API_URL}/chat`); // Debugging
   return axios.post(`${API_URL}/chat`, messageData,);
 };
+
+export const getDeafUserProfile = async (email) => {
+  return axios.get(`http://localhost:5002/api/auth/deaf/profile/${email}`);
+};
+

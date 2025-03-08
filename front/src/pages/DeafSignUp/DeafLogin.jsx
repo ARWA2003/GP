@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { login } from "../../../api";
 
+
 const circleAnimation = {
   animate: {
     y: [0, -20, 0],
@@ -69,6 +70,8 @@ const DeafLogin = () => {
         // Store token in localStorage or session
         localStorage.setItem("token", token);
         localStorage.setItem("userRole", user.role);
+        localStorage.setItem("userEmail", user.email); 
+
   
         console.log("Login successful:", user);
   

@@ -1,11 +1,19 @@
 import Foooter from "./footer/footer";
 import Upperbar from "./Upperbar";
+import { useEffect, useState } from "react";
+import UpperbarV from "./UpperbarV";
 
 export default function AboutUs() {
+  const [userRole, setUserRole] = useState(null);
+
+  useEffect(() => {
+    const role = localStorage.getItem("userRole");
+    setUserRole(role);
+  }, []);
     return (
       <div className="bg-gray-200 ">
    
-<Upperbar/>
+   {userRole === "Deaf/Hard of Hearing" ? <Upperbar /> : userRole === "Volunteer" ? <UpperbarV /> : null}
 <div className="absolute w-[400px] h-[400px] bg-yellow-200 rounded-full top-[-20px] left-[-150px] shadow-lg flex items-center justify-center"> </div>
 <div className="absolute w-[350px] h-[350px] bg-blue-500 rounded-full bottom-[-100px] right-[-100px]"></div>
 
