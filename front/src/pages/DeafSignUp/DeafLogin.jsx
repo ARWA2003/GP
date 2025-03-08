@@ -16,7 +16,7 @@ const circleAnimation = {
   },
 };
 
-const VolunteerLogin = () => {
+const DeafLogin = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
@@ -168,4 +168,4 @@ const VolunteerLogin = () => {
   );
 };
 
-export default VolunteerLogin;
+export default DeafLogin;
