@@ -39,24 +39,27 @@ export const sendFeedbackMessage = async (formData) => {
 
 // Fetch contacts
 export const getContacts = async () => {
-  return axios.get(`${API_URL}/contacts`);
+  const email = localStorage.getItem("userEmail"); // Get email from local storage
+  return axios.get(`${API_URL}/contacts`, { params: { email } });
 };
 
 // Add a new contact
 export const addContact = async (contactData) => {
-  return axios.post(`${API_URL}/contact`, contactData,);
+  const email = localStorage.getItem("userEmail");
+  return axios.post(`${API_URL}/contact`, { ...contactData, email });
 };
-
 
 // Fetch chat history
 export const getChatHistory = async (contactName) => {
-  return axios.get(`${API_URL}/chat`, { params: { contactName } });
+  const email = localStorage.getItem("userEmail");
+  return axios.get(`${API_URL}/chat`, { params: { contactName, email } });
 };
 
 // Add a new chat message
-export const addChatMessage = async ( messageData) => {
-  console.log("Calling API:", `${API_URL}/chat`); // Debugging
-  return axios.post(`${API_URL}/chat`, messageData,);
+export const addChatMessage = async (messageData) => {
+  const email = localStorage.getItem("userEmail");
+  console.log("Calling API:", `${API_URL}/chat`);
+  return axios.post(`${API_URL}/chat`, { ...messageData, email });
 };
 
 export const getDeafUserProfile = async (email) => {

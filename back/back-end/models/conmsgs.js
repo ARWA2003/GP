@@ -8,7 +8,8 @@ const messageSchema = new mongoose.Schema({
 
 const cm = new mongoose.Schema({
     contactName: { type: String, required: true },
-    messages: [messageSchema]
+    messages: [messageSchema],
+    email: { type: String, required: true },
 });
 
 // Keep only the latest 20 messages for each contact

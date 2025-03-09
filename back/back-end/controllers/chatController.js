@@ -3,18 +3,16 @@ import conmsgs from "../models/conmsgs.js"; // Import the conmsgs model
 // Add a new chat message
 export const addChatMessage = async (req, res) => {
     try {
-        const { contactName, message, type } = req.body;
-        if (!contactName || !message) {
-            return res.status(400).json({ error: "Contact name and message are required" });
+        const { contactName, message, type, email } = req.body;
+        if (!contactName || !message || !email) {
+            return res.status(400).json({ error: "Contact name, message, and email are required" });
         }
 
-        // Find or create the conmsgs document for the contact
-        let contactMessages = await conmsgs.findOne({ contactName });
+        let contactMessages = await conmsgs.findOne({ email, contactName });
         if (!contactMessages) {
-            contactMessages = new conmsgs({ contactName, messages: [] });
+            contactMessages = new conmsgs({ email, contactName, messages: [] });
         }
 
-        // Add the new message to the messages array
         contactMessages.messages.push({ message, type });
         await contactMessages.save();
 
@@ -25,19 +23,16 @@ export const addChatMessage = async (req, res) => {
 };
 
 // Get chat history for a contact
-// Backend: getChatHistory function
 export const getChatHistory = async (req, res) => {
     try {
-        const { contactName } = req.query;
-        console.log("Fetching chat history for:", contactName); // Debugging
+        const { contactName, email } = req.query;
+        console.log("Fetching chat history for:", contactName, "Email:", email);
 
-        if (!contactName) {
-            return res.status(400).json({ error: "Contact name is required" });
+        if (!contactName || !email) {
+            return res.status(400).json({ error: "Contact name and email are required" });
         }
 
-        const contactMessages = await conmsgs.findOne({ contactName });
-
-        console.log("Fetched chat data:", contactMessages); // Debugging
+        const contactMessages = await conmsgs.findOne({ email, contactName });
 
         if (!contactMessages) {
             return res.json({ messages: [] });

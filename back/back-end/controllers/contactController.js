@@ -4,21 +4,34 @@ import conmsgs from "../models/conmsgs.js";
 export const addContact = async (req, res) => {
     try {
         const { name } = req.body;
-        if (!name) {
-            return res.status(400).json({ error: "Name is required" });
+        const email = req.body.email || localStorage.getItem("userEmail"); // Get email from request or local storage
+        if (!name || !email) {
+            return res.status(400).json({ error: "Name and email are required" });
         }
-        const contact = await new Contact({ name }).save();
+
+        // Check if contact already exists for this user
+        const existingContact = await conmsgs.findOne({ email, contactName: name });
+        if (existingContact) {
+            return res.status(400).json({ error: "Contact already exists for this user" });
+        }
+
+        const contact = await new conmsgs({ email, contactName: name, messages: [] }).save();
         res.json({ success: true, contact });
     } catch (error) {
         res.status(500).json({ error: "Failed to add contact." });
     }
 };
 
-// Get all contacts
+// Get all contacts for the logged-in user
 export const getContacts = async (req, res) => {
     try {
-        const contacts = await conmsgs.find({}, { contactName: 1, _id: 0 }); // Fetch only contact names
-        console.log("Fetched Contacts:", contacts); // Log the fetched contacts
+        const email = req.query.email || localStorage.getItem("userEmail"); // Get email from query or local storage
+        if (!email) {
+            return res.status(400).json({ error: "Email is required" });
+        }
+
+        const contacts = await conmsgs.find({ email }, { contactName: 1, _id: 0 });
+        console.log("Fetched Contacts:", contacts);
         res.json(contacts);
     } catch (error) {
         res.status(500).json({ error: "Failed to fetch contacts." });
