@@ -29,7 +29,7 @@ const VolunteerSignUp = () => {
     confirmPassword: "",
     phoneNumber: "",
     gender: "",
-    proficiencyLevel: "",
+    signLanguageLevel: "",
     workDays:[],
     role: "Volunteer",
   });
@@ -65,7 +65,7 @@ const VolunteerSignUp = () => {
       }
       if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = "Passwords do not match";
     }else if (step === 2) {
-      if (!formData.proficiencyLevel) { newErrors.proficiencyLevel = "Please select your sign language proficiency level.";}
+      if (!formData.signLanguageLevel) { newErrors.signLanguageLevel = "Please select your sign language proficiency level.";}
       if (formData.workDays.length === 0) newErrors.workDays = "Please select at least one preferred work day";
     }
     setErrors(newErrors);
@@ -168,13 +168,13 @@ const VolunteerSignUp = () => {
           <>
             <h1 className="text-2xl font-bold text-blue-700 mb-4 ">Additional information</h1>
             <label className="block text-black mt-4 text-xl mb-2">you sign language level</label>
-            <div className="space-y-4"><select name="proficiencyLevel" value={formData.proficiencyLevel} onChange={handleChange} className="w-full p-2 border rounded mb-2">
+            <div className="space-y-4"><select name="signLanguageLevel" value={formData.signLanguageLevel} onChange={handleChange} className="w-full p-2 border rounded mb-2">
            <option value="" disabled>Select a level</option>
            <option value="Beginner">Beginner</option>
             <option value="Intermediate">Intermediate</option>
             <option value="Advanced">Advanced</option>
             </select>
-           {errors.proficiencyLevel && <p className="text-red-500">{errors.proficiencyLevel}</p>}
+           {errors.signLanguageLevel && <p className="text-red-500">{errors.signLanguageLevel}</p>}
            </div>
            <label className="block text-black mt-4 text-xl mb-2">Preferred Work Days to Offer Help</label>
               <div className="flex flex-col gap-2">

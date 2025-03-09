@@ -182,7 +182,6 @@ router.get("/deaf/profile/:email", async (req, res) => {
     res.status(500).json({ message: "Server Error" });
   }
 });
-
 router.get("/volunteer/profile/:email", async (req, res) => {
   try {
     const { email } = req.params;
@@ -195,13 +194,13 @@ router.get("/volunteer/profile/:email", async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
+    console.log("Retrieved User Data:", VUser); // Debugging
     res.json(VUser);
   } catch (error) {
     console.error("Error fetching profile:", error);
     res.status(500).json({ message: "Server Error" });
   }
 });
-
 
 
 

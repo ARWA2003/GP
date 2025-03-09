@@ -34,6 +34,7 @@ const Profile = () => {
     const fetchProfile = async () => {
       try {
         const response = await getVOLUserProfile(email);
+        console.log("Fetched User Data:", response.data); // Debugging
         setVUser(response.data);
       } catch (err) {
         setError("Failed to load profile.");
