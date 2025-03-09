@@ -45,7 +45,7 @@ import DailylifeV from './pages/VolunteerDailyLifeNeeds/DailylifeV.jsx';
 import Places from './pages/Places/Places.jsx';
 import ScrollToTop from "./pages/ScrollToTop";
 import PlaceDetails from './pages/Places/PlaceDetails.jsx';
-
+import ProfileV from './pages/Profile/ProfileV.jsx';
 const App = () => {
   return (<>
   <ScrollToTop />
@@ -95,6 +95,7 @@ const App = () => {
         <Route path="/dailylifeV" element={<DailylifeV />} />
         <Route path="/places-to-go" element={<Places />} />
         <Route path="/PlaceDetails/:placeName" element={<PlaceDetails />} />
+        <Route path="/profileV" element={<ProfileV/>} />
 
 
 

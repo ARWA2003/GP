@@ -183,6 +183,25 @@ router.get("/deaf/profile/:email", async (req, res) => {
   }
 });
 
+router.get("/volunteer/profile/:email", async (req, res) => {
+  try {
+    const { email } = req.params;
+    console.log("Fetching profile for:", email); // Debugging
+
+    const VUser = await User.findOne({ email }).select("-password"); 
+
+    if (!VUser) {
+      console.log("User not found for email:", email);
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json(VUser);
+  } catch (error) {
+    console.error("Error fetching profile:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
 
 
 

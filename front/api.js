@@ -62,4 +62,7 @@ export const addChatMessage = async ( messageData) => {
 export const getDeafUserProfile = async (email) => {
   return axios.get(`http://localhost:5002/api/auth/deaf/profile/${email}`);
 };
+export const getVOLUserProfile = async (email) => {
+  return axios.get(`http://localhost:5002/api/auth/volunteer/profile/${email}`);
+};
 

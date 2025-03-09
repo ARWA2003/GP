@@ -38,7 +38,7 @@ const UpperbarV = () => {
         src="/assets/profile.png"
         alt="Profile"
         className="h-14 w-auto rounded-full cursor-pointer"
-        onClick={() => navigate("/profile")}
+        onClick={() => navigate("/profileV")}
       />
               </header>
     );

@@ -67,6 +67,7 @@ const VolunteerLogin = () => {
         // Store token & role
         localStorage.setItem("token", token);
         localStorage.setItem("userRole", user.role);
+        localStorage.setItem("userEmail", user.email); 
 
         console.log("Login successful:", user);
 
