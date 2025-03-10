@@ -214,58 +214,68 @@ const TextToSpeechPage = () => {
     return (
         <>
             <Upperbar />
-            <div className="min-h-screen flex flex-col">
+            <div className="min-h-screen flex flex-col bg-gradient-to-br from-yellow-400 via-blue-500 font-sans">
                 <div className="flex flex-1">
+                    {/* Sidebar */}
                     <div
-                        className={`bg-gray-200 fixed md:relative ${
-                            sidebarOpen ? "w-64" : "w-0"
-                        } transition-all duration-300 overflow-hidden md:block`}
+                        className={`fixed md:relative ${
+                            sidebarOpen ? "w-72" : "w-0"
+                        } transition-all duration-300 overflow-hidden bg-gradient-to-b from-gray-800 to-gray-900 shadow-lg z-20`}
                         aria-label="Contacts"
                     >
                         {sidebarOpen && (
-                            <div className="p-4 h-full flex flex-col">
-                                <button onClick={() => setSidebarOpen(false)} className="self-end">
-                                    ✖
+                            <div className="p-6 h-full flex flex-col text-white">
+                                {/* Close Button */}
+                                <button
+                                    onClick={() => setSidebarOpen(false)}
+                                    className="self-end text-gray-300 hover:text-white transition-colors"
+                                >
+                                    ✕
                                 </button>
+                                {/* Search Input */}
                                 <input
                                     type="text"
                                     placeholder="Search contacts"
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="w-full p-2 mb-4 rounded border bg-gray-600 text-white"
+                                    className="w-full p-3 mb-4 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition"
                                 />
+                                {/* Contacts List */}
                                 <div className="max-h-96 overflow-y-auto">
                                     {filteredContacts.map((contact, index) => (
-                                        <div key={index} className="flex items-center mb-2">
+                                        <div key={index} className="flex items-center mb-3">
                                             <button
                                                 onClick={() => handleSelectContact(contact)}
-                                                className={`flex-1 p-2 rounded ${
-                                                    selectedContact === contact ? "bg-blue-500" : "bg-blue-800"
-                                                } text-white hover:bg-blue-700`}
+                                                className={`flex-1 p-3 rounded-lg text-left transition-colors ${
+                                                    selectedContact === contact
+                                                        ? "bg-yellow-500 text-white"
+                                                        : "bg-gray-700 text-gray-200 hover:bg-gray-600"
+                                                }`}
                                             >
                                                 {contact}
                                             </button>
                                             <button
                                                 onClick={() => handleDeleteContact(contact)}
-                                                className="ml-2 p-2 bg-red-500 text-white rounded hover:bg-red-600"
+                                                className="ml-2 p-2 bg-blue-500 text-white rounded-lg hover:bg-red-600 transition"
                                                 title={`Delete ${contact}`}
                                             >
-                                                🗑️
+                                                x
                                             </button>
                                         </div>
                                     ))}
                                 </div>
+                                {/* Add Contact */}
                                 <div className="mt-4">
                                     <input
                                         type="text"
                                         placeholder="Add new contact"
                                         value={newContact}
                                         onChange={(e) => setNewContact(e.target.value)}
-                                        className="w-full p-2 rounded border bg-gray-600 text-white"
+                                        className="w-full p-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition"
                                     />
                                     <button
                                         onClick={handleAddContact}
-                                        className="w-full bg-yellow-400 text-white p-2 rounded mt-2 hover:bg-yellow-500"
+                                        className="w-full bg-yellow-500 text-white p-3 rounded-lg mt-2 hover:bg-yellow-600 transition"
                                     >
                                         Add Contact
                                     </button>
@@ -274,35 +284,40 @@ const TextToSpeechPage = () => {
                         )}
                     </div>
 
+                    {/* Sidebar Toggle Button */}
                     {!sidebarOpen && (
                         <button
                             onClick={() => setSidebarOpen(true)}
-                            className="absolute left-2 top-1/2 bg-yellow-500 text-white p-2 rounded opacity-50"
+                            className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-yellow-500 text-white p-3 rounded-full hover:bg-yellow-600 transition shadow-lg z-10"
                         >
                             ☰
                         </button>
                     )}
 
-                    <main className="flex-1 bg-yellow-100 p-4 text-white flex flex-col">
+                    {/* Main Chat Area */}
+                    <main className="flex-1 p-6 flex flex-col">
                         {selectedContact ? (
                             <>
-                                <h2 className="text-lg font-bold text-black mb-2">
+                                <h2 className="text-2xl font-bold text-white mb-4">
                                     Chat with {selectedContact}
                                 </h2>
-                                <div className="h-96 overflow-y-auto mb-4 flex-grow">
+                                {/* Chat Messages */}
+                                <div className="flex-1 bg-white p-4 rounded-xl shadow-lg overflow-y-auto mb-4">
                                     {messages[selectedContact]?.map((msg, index) => (
                                         <div
                                             key={index}
-                                            className={`mb-4 p-4 rounded-lg ${
-                                                msg.sender === "You" ? "bg-blue-500 ml-auto" : "bg-gray-600"
-                                            } max-w-md`}
+                                            className={`mb-4 p-4 rounded-xl max-w-md transition-all duration-300 ${
+                                                msg.sender === "You"
+                                                    ? "bg-yellow-100 ml-auto text-right"
+                                                    : "bg-gray-200 mr-auto"
+                                            }`}
                                         >
-                                            <p className="font-bold">{msg.sender}:</p>
-                                            <p>{msg.text}</p>
+                                            <p className="font-semibold text-gray-800">{msg.sender}:</p>
+                                            <p className="text-gray-700">{msg.text}</p>
                                             {msg.isVoice && (
                                                 <button
                                                     onClick={() => speakText(msg.text)}
-                                                    className="text-sm text-gray-200 mt-1"
+                                                    className="text-sm text-yellow-500 mt-1 hover:underline"
                                                 >
                                                     🔊 Replay
                                                 </button>
@@ -311,23 +326,29 @@ const TextToSpeechPage = () => {
                                     ))}
                                 </div>
 
-                                <div className="flex items-center space-x-2">
-                                    <label htmlFor="language-select" className="text-black font-bold">Language:</label>
+                                {/* Language Selector */}
+                                <div className="flex items-center space-x-3 mb-4">
+                                    <label htmlFor="language-select" className="text-white font-semibold">
+                                        Language:
+                                    </label>
                                     <select
                                         id="language-select"
                                         value={selectedLanguage}
                                         onChange={(e) => setSelectedLanguage(e.target.value)}
-                                        className="p-2 rounded bg-gray-600 text-white"
+                                        className="p-2 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition"
                                     >
                                         <option value="en-US">English</option>
                                         <option value="ar-SA">العربية (Arabic)</option>
                                     </select>
                                 </div>
 
-                                <div className="flex items-center mb-2 space-x-2 p-4">
+                                {/* Speech Controls */}
+                                <div className="flex items-center mb-4 space-x-3">
                                     <button
                                         onClick={() => speakText(inputText)}
-                                        className={`p-2 rounded ${isSpeaking ? "bg-yellow-500" : "bg-blue-300"}`}
+                                        className={`p-3 rounded-lg transition-colors ${
+                                            isSpeaking ? "bg-yellow-400 text-gray-800" : "bg-yellow-500 text-white hover:bg-yellow-600"
+                                        }`}
                                         disabled={!inputText.trim()}
                                     >
                                         {isSpeaking ? "⏸️" : "▶️"}
@@ -337,7 +358,7 @@ const TextToSpeechPage = () => {
                                         onChange={(e) =>
                                             setSelectedVoice(voices.find((v) => v.name === e.target.value))
                                         }
-                                        className="p-2 rounded bg-gray-600 text-white"
+                                        className="p-2 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition"
                                     >
                                         {voices.map((voice) => (
                                             <option key={voice.name} value={voice.name}>
@@ -352,17 +373,18 @@ const TextToSpeechPage = () => {
                                         step="0.1"
                                         value={speechRate}
                                         onChange={(e) => setSpeechRate(parseFloat(e.target.value))}
-                                        className="w-24"
+                                        className="w-24 accent-yellow-500"
                                     />
-                                    <span>{speechRate}x</span>
+                                    <span className="text-white">{speechRate}x</span>
                                 </div>
 
-                                <div className="p-4 flex items-center gap-2 w-full">
+                                {/* Message Input */}
+                                <div className="flex items-center gap-3">
                                     <button
                                         onClick={startListening}
-                                        className={`p-2 rounded ${
-                                            isListening ? "bg-red-500" : "bg-green-500"
-                                        }`}
+                                        className={`p-3 rounded-lg transition-colors ${
+                                            isListening ? "bg-blue-500" : "bg-yellow-500 hover:bg-yellow-600"
+                                        } text-white`}
                                         disabled={isListening}
                                         title={isListening ? "Listening..." : "Start Speech-to-Text"}
                                     >
@@ -377,11 +399,11 @@ const TextToSpeechPage = () => {
                                             setInputText(e.target.value);
                                         }}
                                         onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
-                                        className="flex-1 p-2 rounded border bg-gray-600 text-white"
+                                        className="flex-1 p-3 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition"
                                     />
                                     <button
                                         onClick={handleSendMessage}
-                                        className="bg-blue-500 p-2 rounded hover:bg-blue-600"
+                                        className="bg-yellow-500 text-white p-3 rounded-lg hover:bg-yellow-600 transition disabled:opacity-50"
                                         disabled={!inputText.trim()}
                                     >
                                         Send
@@ -389,12 +411,14 @@ const TextToSpeechPage = () => {
                                 </div>
                             </>
                         ) : (
-                            <p className="text-black">Select a contact to start chatting</p>
+                            <div className="flex-1 flex items-center justify-center">
+                                <p className="text-white text-lg">Select a contact to start chatting</p>
+                            </div>
                         )}
                     </main>
                 </div>
 
-                <div className="mb-4">
+                <div className="p-4">
                     <Foooter />
                 </div>
             </div>
