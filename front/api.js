@@ -16,30 +16,19 @@ export const login = async (credentials) => {
   return axios.post(`${API_URL}/auth/login`, credentials);
 };
 
-// Fetch user profile
-// export const getUserProfile = async (token) => {
-//   return axios.get(`${API_URL}/auth/profile`, {
-//     headers: { Authorization: `Bearer ${token}` },
-//   });
-// };
-
 // Send contact message
 export const sendContactMessage = async (formData) => {
   return axios.post(`${API_URL}/contact`, formData);
 };
 
-// Send contact message
+// Send feedback message
 export const sendFeedbackMessage = async (formData) => {
   return axios.post(`${API_URL}/feedback`, formData);
 };
 
-
-
-//related to chats and contacts of tts:
-
 // Fetch contacts
 export const getContacts = async () => {
-  const email = localStorage.getItem("userEmail"); // Get email from local storage
+  const email = localStorage.getItem("userEmail");
   return axios.get(`${API_URL}/contacts`, { params: { email } });
 };
 
@@ -62,10 +51,17 @@ export const addChatMessage = async (messageData) => {
   return axios.post(`${API_URL}/chat`, { ...messageData, email });
 };
 
-export const getDeafUserProfile = async (email) => {
-  return axios.get(`http://localhost:5002/api/auth/deaf/profile/${email}`);
-};
-export const getVOLUserProfile = async (email) => {
-  return axios.get(`http://localhost:5002/api/auth/volunteer/profile/${email}`);
+// Delete a contact
+export const deleteContact = async (contactName) => {
+  const email = localStorage.getItem("userEmail");
+  return axios.delete(`${API_URL}/contact`, { params: { contactName, email } });
 };
 
+// Fetch user profiles
+export const getDeafUserProfile = async (email) => {
+  return axios.get(`${API_URL}/auth/deaf/profile/${email}`);
+};
+
+export const getVOLUserProfile = async (email) => {
+  return axios.get(`${API_URL}/auth/volunteer/profile/${email}`);
+};

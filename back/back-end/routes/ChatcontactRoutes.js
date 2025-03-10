@@ -7,8 +7,9 @@ const router = express.Router();
 router.post("/contact", addContact);
 router.get("/contacts", getContacts);
 router.put("/contact/:id", updateContact);
-router.delete("/contact/:id", deleteContact);
+router.delete("/contact", deleteContact);
 router.post("/chat", addChatMessage);
 // Get chat history for a contact
 router.get("/chat", getChatHistory);
+
 export default router; // ✅ Correct ES Module export

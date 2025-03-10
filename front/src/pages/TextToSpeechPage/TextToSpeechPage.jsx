@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Foooter from "../footer/footer";
 import Upperbar from "../Upperbar";
-import { getContacts, addContact, getChatHistory, addChatMessage } from "../../../api";
+import { getContacts, addContact, getChatHistory, addChatMessage, deleteContact } from "../../../api";
 
 const TextToSpeechPage = () => {
     const [contacts, setContacts] = useState([]);
@@ -18,7 +18,6 @@ const TextToSpeechPage = () => {
     const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth > 768);
     const [selectedLanguage, setSelectedLanguage] = useState("en-US");
 
-    // Effect for fetching contacts (runs only once on mount)
     useEffect(() => {
         const fetchContacts = async () => {
             try {
@@ -44,9 +43,8 @@ const TextToSpeechPage = () => {
         const handleResize = () => setSidebarOpen(window.innerWidth > 768);
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
-    }, []); // Empty dependency array: runs only on mount
+    }, []);
 
-    // Effect for handling voices (runs when selectedVoice changes)
     useEffect(() => {
         const synth = window.speechSynthesis;
         const loadVoices = () => {
@@ -63,7 +61,7 @@ const TextToSpeechPage = () => {
         return () => {
             synth.onvoiceschanged = null;
         };
-    }, [selectedVoice]); // Only re-runs when selectedVoice changes
+    }, [selectedVoice]);
 
     const speakText = (text) => {
         if (!window.speechSynthesis || !text) return;
@@ -162,7 +160,7 @@ const TextToSpeechPage = () => {
             try {
                 const response = await addContact({ name: newContact.trim() });
                 console.log("Add Contact Response:", response.data);
-                const addedContactName = response.data.contactName || response.data.contact?.name || newContact.trim();
+                const addedContactName = response.data.contact.contactName || response.data.contact.name || newContact.trim();
                 setContacts((prevContacts) => [...prevContacts, addedContactName]);
                 setMessages((prev) => ({ ...prev, [addedContactName]: [] }));
                 setNewContact("");
@@ -187,6 +185,25 @@ const TextToSpeechPage = () => {
             }));
         } catch (error) {
             console.error("Failed to fetch chat history:", error);
+        }
+    };
+
+    const handleDeleteContact = async (contact) => {
+        if (window.confirm(`Are you sure you want to delete ${contact}?`)) {
+            try {
+                await deleteContact(contact);
+                setContacts((prevContacts) => prevContacts.filter((c) => c !== contact));
+                setMessages((prev) => {
+                    const newMessages = { ...prev };
+                    delete newMessages[contact];
+                    return newMessages;
+                });
+                if (selectedContact === contact) {
+                    setSelectedContact(null);
+                }
+            } catch (error) {
+                console.error("Failed to delete contact:", error);
+            }
         }
     };
 
@@ -219,15 +236,23 @@ const TextToSpeechPage = () => {
                                 />
                                 <div className="max-h-96 overflow-y-auto">
                                     {filteredContacts.map((contact, index) => (
-                                        <button
-                                            key={index}
-                                            onClick={() => handleSelectContact(contact)}
-                                            className={`block w-full p-2 rounded mb-2 ${
-                                                selectedContact === contact ? "bg-blue-500" : "bg-blue-800"
-                                            } text-white hover:bg-blue-700`}
-                                        >
-                                            {contact}
-                                        </button>
+                                        <div key={index} className="flex items-center mb-2">
+                                            <button
+                                                onClick={() => handleSelectContact(contact)}
+                                                className={`flex-1 p-2 rounded ${
+                                                    selectedContact === contact ? "bg-blue-500" : "bg-blue-800"
+                                                } text-white hover:bg-blue-700`}
+                                            >
+                                                {contact}
+                                            </button>
+                                            <button
+                                                onClick={() => handleDeleteContact(contact)}
+                                                className="ml-2 p-2 bg-red-500 text-white rounded hover:bg-red-600"
+                                                title={`Delete ${contact}`}
+                                            >
+                                                🗑️
+                                            </button>
+                                        </div>
                                     ))}
                                 </div>
                                 <div className="mt-4">
@@ -286,7 +311,6 @@ const TextToSpeechPage = () => {
                                     ))}
                                 </div>
 
-                                {/* Language Selection */}
                                 <div className="flex items-center space-x-2">
                                     <label htmlFor="language-select" className="text-black font-bold">Language:</label>
                                     <select
@@ -300,7 +324,6 @@ const TextToSpeechPage = () => {
                                     </select>
                                 </div>
 
-                                {/* Voice Selection and Speech Rate */}
                                 <div className="flex items-center mb-2 space-x-2 p-4">
                                     <button
                                         onClick={() => speakText(inputText)}
@@ -334,7 +357,6 @@ const TextToSpeechPage = () => {
                                     <span>{speechRate}x</span>
                                 </div>
 
-                                {/* Message Input with Speech-to-Text */}
                                 <div className="p-4 flex items-center gap-2 w-full">
                                     <button
                                         onClick={startListening}
