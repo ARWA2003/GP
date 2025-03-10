@@ -12,7 +12,7 @@ const TextToSpeechPage = () => {
     const [inputText, setInputText] = useState("");
     const [selectedVoice, setSelectedVoice] = useState(null);
     const [voices, setVoices] = useState([]);
-    const [isSpeaking, setIsSpeaking] = useState(false);
+    const [ setIsSpeaking] = useState(false);
     const [speechRate, setSpeechRate] = useState(1);
     const [isListening, setIsListening] = useState(false);
     const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth > 768);
@@ -153,7 +153,7 @@ const TextToSpeechPage = () => {
         }
     };
 
-    const handleSearchChange = (e) => setSearchTerm(e.target.value);
+    // const handleSearchChange = (e) => setSearchTerm(e.target.value);
 
     const handleAddContact = async () => {
         if (newContact.trim() !== "" && !contacts.includes(newContact.trim())) {
