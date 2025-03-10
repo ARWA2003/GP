@@ -46,6 +46,7 @@ import Places from './pages/Places/Places.jsx';
 import ScrollToTop from "./pages/ScrollToTop";
 import PlaceDetails from './pages/Places/PlaceDetails.jsx';
 import ProfileV from './pages/Profile/ProfileV.jsx';
+import CourseDetail from './pages/Education/CourseDetail.jsx';
 const App = () => {
   return (<>
   <ScrollToTop />
@@ -73,6 +74,7 @@ const App = () => {
       <Route path="/Entertainment-vid" element={<EntV />} />
       <Route path="/Etools" element={<Etools />} />
       <Route path="/courses" element={<Courses />} />
+      <Route path="/courses/:category" element={<CourseDetail />} />
       <Route path="/Careerhome" element={<Careerhome />} />
       <Route path="/Careercv" element={<CareerResume />} />
       <Route path="/text-to-speech" element={<TextToSpeechPage />} />
