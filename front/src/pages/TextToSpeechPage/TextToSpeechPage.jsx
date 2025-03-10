@@ -213,7 +213,7 @@ const TextToSpeechPage = () => {
 
     return (
         <>
-            <Upperbar />
+          <Upperbar/>
             <div className="min-h-screen flex flex-col bg-gradient-to-br from-yellow-400 via-blue-500 font-sans">
                 <div className="flex flex-1">
                     {/* Sidebar */}
@@ -256,7 +256,7 @@ const TextToSpeechPage = () => {
                                             </button>
                                             <button
                                                 onClick={() => handleDeleteContact(contact)}
-                                                className="ml-2 p-2 bg-blue-500 text-white rounded-lg hover:bg-red-600 transition"
+                                                className="ml-2 p-2 bg-blue-500 text-white rounded-lg hover:bg-yellow-600 transition"
                                                 title={`Delete ${contact}`}
                                             >
                                                 x
@@ -288,7 +288,7 @@ const TextToSpeechPage = () => {
                     {!sidebarOpen && (
                         <button
                             onClick={() => setSidebarOpen(true)}
-                            className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-yellow-500 text-white p-3 rounded-full hover:bg-yellow-600 transition shadow-lg z-10"
+                            className="absolute left-4 top-1/2 transform bg-yellow-500 text-white p-3 rounded-full hover:bg-yellow-600 transition shadow-lg z-10"
                         >
                             ☰
                         </button>
@@ -326,8 +326,8 @@ const TextToSpeechPage = () => {
                                     ))}
                                 </div>
 
-                                {/* Language Selector */}
-                                <div className="flex items-center space-x-3 mb-4">
+                                {/* Language and Speech Controls */}
+                                <div className="flex items-center space-x-3 mb-4 bg-gray-800 p-3 rounded-lg">
                                     <label htmlFor="language-select" className="text-white font-semibold">
                                         Language:
                                     </label>
@@ -335,30 +335,17 @@ const TextToSpeechPage = () => {
                                         id="language-select"
                                         value={selectedLanguage}
                                         onChange={(e) => setSelectedLanguage(e.target.value)}
-                                        className="p-2 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition"
+                                        className="p-2 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition"
                                     >
                                         <option value="en-US">English</option>
                                         <option value="ar-SA">العربية (Arabic)</option>
                                     </select>
-                                </div>
-
-                                {/* Speech Controls */}
-                                <div className="flex items-center mb-4 space-x-3">
-                                    <button
-                                        onClick={() => speakText(inputText)}
-                                        className={`p-3 rounded-lg transition-colors ${
-                                            isSpeaking ? "bg-yellow-400 text-gray-800" : "bg-yellow-500 text-white hover:bg-yellow-600"
-                                        }`}
-                                        disabled={!inputText.trim()}
-                                    >
-                                        {isSpeaking ? "⏸️" : "▶️"}
-                                    </button>
                                     <select
                                         value={selectedVoice?.name || ""}
                                         onChange={(e) =>
                                             setSelectedVoice(voices.find((v) => v.name === e.target.value))
                                         }
-                                        className="p-2 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition"
+                                        className="p-2 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition"
                                     >
                                         {voices.map((voice) => (
                                             <option key={voice.name} value={voice.name}>
@@ -379,7 +366,7 @@ const TextToSpeechPage = () => {
                                 </div>
 
                                 {/* Message Input */}
-                                <div className="flex items-center gap-3">
+                                <div className="flex items-center gap-3 bg-gray-800 p-3 rounded-lg">
                                     <button
                                         onClick={startListening}
                                         className={`p-3 rounded-lg transition-colors ${
@@ -399,7 +386,7 @@ const TextToSpeechPage = () => {
                                             setInputText(e.target.value);
                                         }}
                                         onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
-                                        className="flex-1 p-3 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition"
+                                        className="flex-1 p-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition"
                                     />
                                     <button
                                         onClick={handleSendMessage}
