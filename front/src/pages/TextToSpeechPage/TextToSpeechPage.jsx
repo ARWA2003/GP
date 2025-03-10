@@ -18,15 +18,17 @@ const TextToSpeechPage = () => {
     const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth > 768);
     const [selectedLanguage, setSelectedLanguage] = useState("en-US");
 
+    // Effect for fetching contacts (runs only once on mount)
     useEffect(() => {
         const fetchContacts = async () => {
             try {
                 const response = await getContacts();
-                console.log("Backend Response:", response.data); // Log the response
-                const contactsArray = response.data.map((contact) => contact.contactName); // Use contactName
+                console.log("Backend Response (getContacts):", response.data);
+                const contactsArray = response.data.map((contact) =>
+                    contact.contactName || contact.name
+                );
                 setContacts(contactsArray);
-        
-                // Initialize messages state with empty arrays for each contact
+
                 const initialMessages = {};
                 contactsArray.forEach((contact) => {
                     initialMessages[contact] = [];
@@ -39,6 +41,13 @@ const TextToSpeechPage = () => {
 
         fetchContacts();
 
+        const handleResize = () => setSidebarOpen(window.innerWidth > 768);
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []); // Empty dependency array: runs only on mount
+
+    // Effect for handling voices (runs when selectedVoice changes)
+    useEffect(() => {
         const synth = window.speechSynthesis;
         const loadVoices = () => {
             const availableVoices = synth.getVoices();
@@ -51,13 +60,10 @@ const TextToSpeechPage = () => {
         synth.onvoiceschanged = loadVoices;
         loadVoices();
 
-        const handleResize = () => setSidebarOpen(window.innerWidth > 768);
-        window.addEventListener("resize", handleResize);
         return () => {
-            window.removeEventListener("resize", handleResize);
             synth.onvoiceschanged = null;
         };
-    }, [selectedVoice]);
+    }, [selectedVoice]); // Only re-runs when selectedVoice changes
 
     const speakText = (text) => {
         if (!window.speechSynthesis || !text) return;
@@ -139,7 +145,7 @@ const TextToSpeechPage = () => {
                 await addChatMessage({ contactName: selectedContact, message: inputText.trim(), type: "speech" });
                 setMessages((prev) => ({
                     ...prev,
-                    [selectedContact]: [...(prev[selectedContact] || []), newMessage], // Ensure it's an array
+                    [selectedContact]: [...(prev[selectedContact] || []), newMessage],
                 }));
                 speakText(inputText.trim());
                 setInputText("");
@@ -155,8 +161,10 @@ const TextToSpeechPage = () => {
         if (newContact.trim() !== "" && !contacts.includes(newContact.trim())) {
             try {
                 const response = await addContact({ name: newContact.trim() });
-                setContacts([...contacts, response.data.contact.name]);
-                setMessages((prev) => ({ ...prev, [newContact.trim()]: [] })); // Initialize with empty array
+                console.log("Add Contact Response:", response.data);
+                const addedContactName = response.data.contactName || response.data.contact?.name || newContact.trim();
+                setContacts((prevContacts) => [...prevContacts, addedContactName]);
+                setMessages((prev) => ({ ...prev, [addedContactName]: [] }));
                 setNewContact("");
             } catch (error) {
                 console.error("Failed to add contact:", error);
@@ -167,8 +175,8 @@ const TextToSpeechPage = () => {
     const handleSelectContact = async (contact) => {
         setSelectedContact(contact);
         try {
-            const response = await getChatHistory(contact); // Fetch messages for the selected contact
-            console.log("Chat History Response:", response.data); // Log the response
+            const response = await getChatHistory(contact);
+            console.log("Chat History Response:", response.data);
             setMessages((prev) => ({
                 ...prev,
                 [contact]: response.data.messages.map((msg) => ({
@@ -177,7 +185,6 @@ const TextToSpeechPage = () => {
                     isVoice: msg.type === "speech",
                 })),
             }));
-            
         } catch (error) {
             console.error("Failed to fetch chat history:", error);
         }
@@ -204,25 +211,25 @@ const TextToSpeechPage = () => {
                                     ✖
                                 </button>
                                 <input
-                type="text"
-                placeholder="Search contacts"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full p-2 mb-4 rounded border bg-gray-600 text-white"
-            />
-                               <div className="max-h-96 overflow-y-auto">
-                {filteredContacts.map((contact, index) => (
-                   <button
-                   key={index}
-                   onClick={() => handleSelectContact(contact)} // Call the function here
-                   className={`block w-full p-2 rounded mb-2 ${
-                       selectedContact === contact ? "bg-blue-500" : "bg-blue-800"
-                   } text-white hover:bg-blue-700`}
-               >
-                   {contact}
-               </button>
-                ))}
-            </div>
+                                    type="text"
+                                    placeholder="Search contacts"
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="w-full p-2 mb-4 rounded border bg-gray-600 text-white"
+                                />
+                                <div className="max-h-96 overflow-y-auto">
+                                    {filteredContacts.map((contact, index) => (
+                                        <button
+                                            key={index}
+                                            onClick={() => handleSelectContact(contact)}
+                                            className={`block w-full p-2 rounded mb-2 ${
+                                                selectedContact === contact ? "bg-blue-500" : "bg-blue-800"
+                                            } text-white hover:bg-blue-700`}
+                                        >
+                                            {contact}
+                                        </button>
+                                    ))}
+                                </div>
                                 <div className="mt-4">
                                     <input
                                         type="text"
@@ -252,116 +259,116 @@ const TextToSpeechPage = () => {
                     )}
 
                     <main className="flex-1 bg-yellow-100 p-4 text-white flex flex-col">
-                    {selectedContact ? (
-    <>
-        <h2 className="text-lg font-bold text-black mb-2">
-            Chat with {selectedContact}
-        </h2>
-        <div className="h-96 overflow-y-auto mb-4 flex-grow">
-            {messages[selectedContact]?.map((msg, index) => (
-                <div
-                    key={index}
-                    className={`mb-4 p-4 rounded-lg ${
-                        msg.sender === "You" ? "bg-blue-500 ml-auto" : "bg-gray-600"
-                    } max-w-md`}
-                >
-                    <p className="font-bold">{msg.sender}:</p>
-                    <p>{msg.text}</p>
-                    {msg.isVoice && (
-                        <button
-                            onClick={() => speakText(msg.text)}
-                            className="text-sm text-gray-200 mt-1"
-                        >
-                            🔊 Replay
-                        </button>
-                    )}
-                </div>
-            ))}
-        </div>
+                        {selectedContact ? (
+                            <>
+                                <h2 className="text-lg font-bold text-black mb-2">
+                                    Chat with {selectedContact}
+                                </h2>
+                                <div className="h-96 overflow-y-auto mb-4 flex-grow">
+                                    {messages[selectedContact]?.map((msg, index) => (
+                                        <div
+                                            key={index}
+                                            className={`mb-4 p-4 rounded-lg ${
+                                                msg.sender === "You" ? "bg-blue-500 ml-auto" : "bg-gray-600"
+                                            } max-w-md`}
+                                        >
+                                            <p className="font-bold">{msg.sender}:</p>
+                                            <p>{msg.text}</p>
+                                            {msg.isVoice && (
+                                                <button
+                                                    onClick={() => speakText(msg.text)}
+                                                    className="text-sm text-gray-200 mt-1"
+                                                >
+                                                    🔊 Replay
+                                                </button>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
 
-        {/* Language Selection */}
-        <div className="flex items-center space-x-2">
-            <label htmlFor="language-select" className="text-black font-bold">Language:</label>
-            <select
-                id="language-select"
-                value={selectedLanguage}
-                onChange={(e) => setSelectedLanguage(e.target.value)}
-                className="p-2 rounded bg-gray-600 text-white"
-            >
-                <option value="en-US">English</option>
-                <option value="ar-SA">العربية (Arabic)</option>
-            </select>
-        </div>
+                                {/* Language Selection */}
+                                <div className="flex items-center space-x-2">
+                                    <label htmlFor="language-select" className="text-black font-bold">Language:</label>
+                                    <select
+                                        id="language-select"
+                                        value={selectedLanguage}
+                                        onChange={(e) => setSelectedLanguage(e.target.value)}
+                                        className="p-2 rounded bg-gray-600 text-white"
+                                    >
+                                        <option value="en-US">English</option>
+                                        <option value="ar-SA">العربية (Arabic)</option>
+                                    </select>
+                                </div>
 
-        {/* Voice Selection and Speech Rate */}
-        <div className="flex items-center mb-2 space-x-2 p-4">
-            <button
-                onClick={() => speakText(inputText)}
-                className={`p-2 rounded ${isSpeaking ? "bg-yellow-500" : "bg-blue-300"}`}
-                disabled={!inputText.trim()}
-            >
-                {isSpeaking ? "⏸️" : "▶️"}
-            </button>
-            <select
-                value={selectedVoice?.name || ""}
-                onChange={(e) =>
-                    setSelectedVoice(voices.find((v) => v.name === e.target.value))
-                }
-                className="p-2 rounded bg-gray-600 text-white"
-            >
-                {voices.map((voice) => (
-                    <option key={voice.name} value={voice.name}>
-                        {voice.name} ({voice.lang})
-                    </option>
-                ))}
-            </select>
-            <input
-                type="range"
-                min="0.5"
-                max="2"
-                step="0.1"
-                value={speechRate}
-                onChange={(e) => setSpeechRate(parseFloat(e.target.value))}
-                className="w-24"
-            />
-            <span>{speechRate}x</span>
-        </div>
+                                {/* Voice Selection and Speech Rate */}
+                                <div className="flex items-center mb-2 space-x-2 p-4">
+                                    <button
+                                        onClick={() => speakText(inputText)}
+                                        className={`p-2 rounded ${isSpeaking ? "bg-yellow-500" : "bg-blue-300"}`}
+                                        disabled={!inputText.trim()}
+                                    >
+                                        {isSpeaking ? "⏸️" : "▶️"}
+                                    </button>
+                                    <select
+                                        value={selectedVoice?.name || ""}
+                                        onChange={(e) =>
+                                            setSelectedVoice(voices.find((v) => v.name === e.target.value))
+                                        }
+                                        className="p-2 rounded bg-gray-600 text-white"
+                                    >
+                                        {voices.map((voice) => (
+                                            <option key={voice.name} value={voice.name}>
+                                                {voice.name} ({voice.lang})
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <input
+                                        type="range"
+                                        min="0.5"
+                                        max="2"
+                                        step="0.1"
+                                        value={speechRate}
+                                        onChange={(e) => setSpeechRate(parseFloat(e.target.value))}
+                                        className="w-24"
+                                    />
+                                    <span>{speechRate}x</span>
+                                </div>
 
-        {/* Message Input with Speech-to-Text */}
-        <div className="p-4 flex items-center gap-2 w-full">
-            <button
-                onClick={startListening}
-                className={`p-2 rounded ${
-                    isListening ? "bg-red-500" : "bg-green-500"
-                }`}
-                disabled={isListening}
-                title={isListening ? "Listening..." : "Start Speech-to-Text"}
-            >
-                {isListening ? "🎙️" : "🎤"}
-            </button>
-            <input
-                type="text"
-                placeholder="Type or speak your message..."
-                value={inputText}
-                onChange={(e) => {
-                    console.log("Input changed:", e.target.value); // Debugging
-                    setInputText(e.target.value);
-                }}
-                onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
-                className="flex-1 p-2 rounded border bg-gray-600 text-white"
-            />
-            <button
-                onClick={handleSendMessage}
-                className="bg-blue-500 p-2 rounded hover:bg-blue-600"
-                disabled={!inputText.trim()}
-            >
-                Send
-            </button>
-        </div>
-    </>
-) : (
-    <p className="text-black">Select a contact to start chatting</p>
-)}
+                                {/* Message Input with Speech-to-Text */}
+                                <div className="p-4 flex items-center gap-2 w-full">
+                                    <button
+                                        onClick={startListening}
+                                        className={`p-2 rounded ${
+                                            isListening ? "bg-red-500" : "bg-green-500"
+                                        }`}
+                                        disabled={isListening}
+                                        title={isListening ? "Listening..." : "Start Speech-to-Text"}
+                                    >
+                                        {isListening ? "🎙️" : "🎤"}
+                                    </button>
+                                    <input
+                                        type="text"
+                                        placeholder="Type or speak your message..."
+                                        value={inputText}
+                                        onChange={(e) => {
+                                            console.log("Input changed:", e.target.value);
+                                            setInputText(e.target.value);
+                                        }}
+                                        onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
+                                        className="flex-1 p-2 rounded border bg-gray-600 text-white"
+                                    />
+                                    <button
+                                        onClick={handleSendMessage}
+                                        className="bg-blue-500 p-2 rounded hover:bg-blue-600"
+                                        disabled={!inputText.trim()}
+                                    >
+                                        Send
+                                    </button>
+                                </div>
+                            </>
+                        ) : (
+                            <p className="text-black">Select a contact to start chatting</p>
+                        )}
                     </main>
                 </div>
 
