@@ -6,8 +6,13 @@ import authRoutes from "./routes/auth.js";
 //import contactRoutes from "./routes/contact.js";
 import feedbackRoutes from "./routes/feedbackRoutes.js";
 import contactRoutes from "./routes/ChatcontactRoutes.js"; // Ensure this import is correct
-
-
+import jobRoutes from "./routes/jobRoutes.js";
+//import jobController ,{ createJob , getAllJobs,getJobById,updateJob,deleteJob} from "../controllers/jobController.js";
+//import job from "../models/job.js";
+//import jobController from "../controllers/jobController.js"; 
+import {createJob} from "./controllers/jobController.js";
+import Job from "./models/job.js";
+import authMiddleware from './middleware/authMiddleware.js';
 dotenv.config();
 
 const app = express();
@@ -32,7 +37,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/feedback", feedbackRoutes);
 app.use("/api", contactRoutes);
-
+app.use("/api/jobs", jobRoutes);
 // MongoDB Connection
 mongoose
   .connect(process.env.MONGO_URI)
