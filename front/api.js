@@ -65,3 +65,12 @@ export const getDeafUserProfile = async (email) => {
 export const getVOLUserProfile = async (email) => {
   return axios.get(`${API_URL}/auth/volunteer/profile/${email}`);
 };
+
+// Fetch job listings
+// api.js
+// Ensure axios is imported
+
+export const getJobs = async () => {
+  const response = await axios.get(`${API_URL}/jobs`);
+  return response.data; // Return only the data array
+};

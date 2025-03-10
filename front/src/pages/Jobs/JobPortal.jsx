@@ -4,23 +4,59 @@ import Foooter from "../footer/footer";
 import { Link } from "react-router-dom";
 import Upperbar from "../Upperbar";
 import { useNavigate } from "react-router-dom";
+import { getJobs } from "../../../api";
 
 const JobPortal = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Fetch job data from JSON file
   useEffect(() => {
-    fetch("/scraped_jobs.json")
-      .then((response) => response.json())
-      .then((data) => setJobs(data))
-      .catch((error) => console.error("Error fetching job data:", error));
+    const fetchJobs = async () => {
+      try {
+        const data = await getJobs();
+        console.log("Fetched jobs data:", data);
+        setJobs(Array.isArray(data) ? data : []);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching jobs:", error);
+        setError("Failed to fetch jobs. Please try again later.");
+        setLoading(false);
+      }
+    };
+    fetchJobs();
   }, []);
 
-  const filteredJobs = jobs.filter((job) =>
-    job.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Log jobs state whenever it updates
+  useEffect(() => {
+    console.log("Jobs state updated:", jobs);
+  }, [jobs]);
+
+  const filteredJobs = jobs.filter((job) => {
+    const title = job.job_title || "";
+    return title.toLowerCase().includes(searchTerm.toLowerCase());
+  });
+
+  // Log filtered jobs
+  console.log("Filtered jobs:", filteredJobs);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-blue-900 to-blue-500 flex justify-center items-center text-white">
+        Loading...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-blue-900 to-blue-500 flex justify-center items-center text-white">
+        {error}
+      </div>
+    );
+  }
 
   return (
     <>
@@ -43,35 +79,40 @@ const JobPortal = () => {
           </div>
         </div>
 
-        {/* Jobs Section */}
         <div className="max-w-6xl mx-auto py-10 px-5">
           <h2 className="text-2xl font-bold mb-5 text-white">Most Featured Jobs</h2>
           <div className="grid md:grid-cols-3 gap-6">
-            {filteredJobs.map((job, index) => (
-              <div key={index} className="bg-white p-5 shadow-lg rounded-lg relative text-gray-900">
-                <h3 className="text-lg font-bold mt-3">{job.title}</h3>
-                <div className="mt-2 flex items-center text-gray-600">
-                  <Briefcase size={16} className="mr-2" />
-                  <span>{job.type}</span>
+            {filteredJobs.length > 0 ? (
+              filteredJobs.map((job, index) => (
+                <div key={index} className="bg-white p-5 shadow-lg rounded-lg relative text-gray-900">
+                  <h3 className="text-lg font-bold mt-3">{job.job_title}</h3>
+                  <div className="mt-2 flex items-center text-gray-600">
+                    <Briefcase size={16} className="mr-2" />
+                    <span>{job.job_type || "N/A"}</span>
+                  </div>
+                  <div className="flex items-center text-gray-600 mt-1">
+                    <MapPin size={16} className="mr-2" />
+                    <span>{job.location || "N/A"}</span>
+                  </div>
+                  <button
+                    onClick={() => navigate("/job-details", { state: { job } })}
+                    className="mt-3 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
+                  >
+                    Apply Now
+                  </button>
                 </div>
-                <div className="flex items-center text-gray-600 mt-1">
-                  <MapPin size={16} className="mr-2" />
-                  <span>{job.location}</span>
-                </div>
-                <button 
-                  onClick={() => navigate("/job-details", { state: { job } })}
-                  className="mt-3 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
-                >
-                  Apply Now
-                </button>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p className="text-white">No jobs found.</p>
+            )}
           </div>
         </div>
 
-        {/* View More Jobs Button */}
         <div className="flex justify-center mt-5 mb-5">
-          <Link to="/careers" className="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg text-lg font-semibold hover:bg-blue-800 transition duration-300 shadow-md">
+          <Link
+            to="/careers"
+            className="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg text-lg font-semibold hover:bg-blue-800 transition duration-300 shadow-md"
+          >
             View More Jobs <ArrowRight size={20} />
           </Link>
         </div>

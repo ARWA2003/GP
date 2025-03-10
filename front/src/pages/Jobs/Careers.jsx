@@ -3,6 +3,7 @@ import { FaSearch, FaMapMarkerAlt, FaClock, FaArrowLeft, FaArrowRight } from "re
 import Foooter from "../footer/footer";
 import Upperbar from "../Upperbar";
 import { useNavigate } from "react-router-dom";
+import { getJobs } from "../../../api"; // Adjust the import path based on your project structure
 
 export default function JobListings() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -11,21 +12,24 @@ export default function JobListings() {
   const [currentPage, setCurrentPage] = useState(1);
   const [jobListings, setJobListings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const jobsPerPage = 6;
   const navigate = useNavigate();
 
-  // Fetch the JSON data from the public folder when the component mounts
   useEffect(() => {
-    fetch("/job_listings.json") // Path to the JSON file in the public folder
-      .then((response) => response.json())
-      .then((data) => {
+    const fetchJobs = async () => {
+      try {
+        const data = await getJobs();
+        console.log("Fetched jobs data:", data); // Debug the API response
         setJobListings(data);
         setLoading(false);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error("Error fetching job listings:", error);
+        setError("Failed to fetch job listings. Please try again later.");
         setLoading(false);
-      });
+      }
+    };
+    fetchJobs();
   }, []);
 
   const handleSearchChange = (e) => {
@@ -35,9 +39,9 @@ export default function JobListings() {
 
   const filteredJobs = jobListings.filter(
     (job) =>
-      job["Job Title"].toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (selectedType === "" || job["Job Type"] === selectedType) &&
-      (selectedLocation === "" || job["Location"] === selectedLocation)
+      (job.job_title?.toLowerCase() || "").includes(searchQuery.toLowerCase()) &&
+      (selectedType === "" || job.job_type === selectedType) &&
+      (selectedLocation === "" || job.location === selectedLocation)
   );
 
   const indexOfLastJob = currentPage * jobsPerPage;
@@ -47,6 +51,14 @@ export default function JobListings() {
 
   if (loading) {
     return <div className="bg-gray-100 min-h-screen flex justify-center items-center">Loading...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className="bg-gray-100 min-h-screen flex justify-center items-center text-red-500">
+        {error}
+      </div>
+    );
   }
 
   return (
@@ -83,7 +95,7 @@ export default function JobListings() {
             className="outline-none"
           >
             <option value="">Location</option>
-            {Array.from(new Set(jobListings.map((job) => job["Location"]))).map((location) => (
+            {Array.from(new Set(jobListings.map((job) => job.location))).map((location) => (
               <option key={location} value={location}>
                 {location}
               </option>
@@ -91,24 +103,28 @@ export default function JobListings() {
           </select>
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-4 p-4">
-        {currentJobs.map((job, index) => (
-          <div key={index} className="p-4 border rounded-lg shadow-md bg-white">
-            <h2 className="font-semibold text-lg text-blue-500">{job["Job Title"]}</h2>
-            <p className="flex items-center gap-2 text-gray-600">
-              <FaClock /> {job["Job Type"]}
-            </p>
-            <p className="flex items-center gap-2 text-gray-600">
-              <FaMapMarkerAlt /> {job["Location"]}
-            </p>
-            <button
-              onClick={() => navigate("/job-details")}
-              className="mt-3 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-            >
-              Apply Now
-            </button>
-          </div>
-        ))}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+        {currentJobs.length > 0 ? (
+          currentJobs.map((job, index) => (
+            <div key={index} className="p-4 border rounded-lg shadow-md bg-white">
+              <h2 className="font-semibold text-lg text-blue-500">{job.job_title}</h2>
+              <p className="flex items-center gap-2 text-gray-600">
+                <FaClock /> {job.job_type || "N/A"}
+              </p>
+              <p className="flex items-center gap-2 text-gray-600">
+                <FaMapMarkerAlt /> {job.location || "N/A"}
+              </p>
+              <button
+                onClick={() => navigate("/job-details", { state: { job } })}
+                className="mt-3 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+              >
+                Apply Now
+              </button>
+            </div>
+          ))
+        ) : (
+          <p className="text-center col-span-3 text-gray-600">No jobs found.</p>
+        )}
       </div>
       <div className="flex justify-center items-center gap-4 mt-4">
         <button
