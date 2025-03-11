@@ -1,92 +1,114 @@
-// PlaceDetails.js
-import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { FiSearch } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
+import Upperbar from "../Upperbar";
+import Foooter from "../footer/footer";
 import { getPlaces } from "../../../api"; // Adjust path to your API file
 
-export default function PlaceDetails() {
-  const { placeName } = useParams();
-  const navigate = useNavigate();
-  const [place, setPlace] = useState(null);
+export default function Places() {
+  const [search, setSearch] = useState("");
+  const [places, setPlaces] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchPlaceDetails = async () => {
+    const fetchPlaces = async () => {
       try {
         const placesData = await getPlaces();
-        const foundPlace = placesData.find(
-          p => p.name.toLowerCase() === decodeURIComponent(placeName).toLowerCase()
-        );
-        if (foundPlace) {
-          setPlace({
-            name: foundPlace.name,
-            image: foundPlace.image,
-            location: foundPlace.location,
-            tickets: {
-              children: foundPlace.price.includes("|") ? foundPlace.price.split("|")[0] : foundPlace.price,
-              adults: foundPlace.price.includes("|") ? foundPlace.price.split("|")[1] : foundPlace.price
-            },
-            times: {
-              weekday: foundPlace.time.includes("|") ? foundPlace.time.split("|")[0] : foundPlace.time,
-              weekend: foundPlace.time.includes("|") ? foundPlace.time.split("|")[1] : foundPlace.time
-            }
-          });
-        }
+        setPlaces(placesData);
         setLoading(false);
       } catch (err) {
-        setError("Failed to fetch place details: " + err.message);
+        setError("Failed to fetch places: " + err.message);
         setLoading(false);
       }
     };
-    fetchPlaceDetails();
-  }, [placeName]);
+    fetchPlaces();
+  }, []);
 
-  if (loading) return <div>Loading place details...</div>;
+  // Improved search function for Arabic support
+  const normalizeText = (text) => {
+    return text
+      .normalize("NFKD") // Decompose combined characters
+      .replace(/[\u0300-\u036f]/g, "") // Remove diacritics
+      .replace(/[إأآ]/g, "ا") // Normalize different forms of Alif
+      .replace(/ة/g, "ه") // Normalize Ta Marbuta to Ha
+      .replace(/ي/g, "ى") // Normalize Ya to Alef Maksura
+      .trim();
+  };
+
+  const filteredPlaces = places.filter((place) => {
+    const normalizedPlaceName = normalizeText(place.name);
+    const normalizedSearch = normalizeText(search);
+    return normalizedPlaceName.includes(normalizedSearch);
+  });
+
+  if (loading) return <div>Loading places...</div>;
   if (error) return <div>{error}</div>;
-  if (!place) return <p className="text-center text-gray-500">Place not found.</p>;
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <button
-        onClick={() => navigate("/places-to-go")}
-        className="mb-4 text-blue-500 hover:underline"
+    <div>
+      <Upperbar />
+      <header
+        className="relative p-6"
+        style={{
+          backgroundImage: "url('/assets/background.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
       >
-        ← Back to Places
-      </button>
-      <div className="relative">
-        <img src={place.image} alt={place.name} className="w-full h-64 object-cover rounded-lg" />
-        <h1 className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white px-4 py-2 rounded-lg text-xl font-bold shadow-lg">
-          {place.name}
-        </h1>
-      </div>
+        <div className="text-center mt-10">
+          <h2 className="text-3xl font-bold">استكشف الأماكن المناسبة للصم</h2>
+          <p className="text-lg mt-2 opacity-80">ابحث عن مواقع يسهل الوصول إليها بالقرب منك</p>
 
-      <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-          <h2 className="text-xl font-bold flex items-center justify-center gap-2">
-            <img src="/assets/Ticket.jpg" alt="Tickets Icon" className="w-6 h-6" />
-            Tickets
-          </h2>
-          <p className="bg-gray-200 px-4 py-2 rounded mt-2">Children: {place.tickets.children}</p>
-          <p className="bg-gray-300 px-4 py-2 rounded mt-2">Adults: {place.tickets.adults}</p>
+          <div className="mt-6 flex justify-center">
+            <div className="bg-white p-2 rounded-lg flex items-center w-full max-w-lg">
+              <input
+                type="text"
+                placeholder="ابحث عن المكان الذي يناسبك"
+                className="flex-1 px-4 py-2 text-black outline-none"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              <button
+                className="bg-blue-500 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+                onClick={() => {
+                  const matchedPlace = filteredPlaces[0];
+                  if (matchedPlace) {
+                    navigate(`/PlaceDetails/${encodeURIComponent(matchedPlace.name)}`);
+                  }
+                }}
+              >
+                <FiSearch /> بحث
+              </button>
+            </div>
+          </div>
         </div>
+      </header>
 
-        <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-          <h2 className="text-xl font-bold flex items-center justify-center gap-2">
-            <img src="/assets/Opening.jpeg" alt="Opening Times Icon" className="w-6 h-6" />
-            Opening Times
-          </h2>
-          <p className="mt-2">Weekdays: {place.times.weekday}</p>
-          <p className="font-bold text-red-500">Weekends: {place.times.weekend}</p>
+      <section className="container mx-auto p-6">
+        <h2 className="text-2xl font-bold">الأماكن الأكثر تميزًا</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+          {filteredPlaces.length > 0 ? (
+            filteredPlaces.map((place) => (
+              <div
+                key={place._id}
+                className="bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer hover:shadow-xl transition-shadow duration-300"
+                onClick={() => navigate(`/PlaceDetails/${encodeURIComponent(place.name)}`)}
+              >
+                <img src={place.image} alt={place.name} className="w-full h-32 object-cover" />
+                <div className="p-2">
+                  <h3 className="text-sm font-bold">{place.name}</h3>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p className="text-center col-span-3 text-gray-500">لم يتم العثور على أماكن</p>
+          )}
         </div>
+      </section>
 
-        <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-          <h2 className="text-xl font-bold flex items-center justify-center gap-2">
-            <img src="/assets/Location.jpeg" alt="Location Icon" className="w-6 h-6" />
-            Location
-          </h2>
-          <p className="mt-2">{place.location}</p>
-        </div>
-      </div>
+      <Foooter />
     </div>
   );
 }
