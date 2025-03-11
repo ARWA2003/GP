@@ -15,21 +15,15 @@ export default function PlaceDetails() {
       try {
         const placesData = await getPlaces();
         const foundPlace = placesData.find(
-          p => p.name.toLowerCase() === decodeURIComponent(placeName).toLowerCase()
+          (p) => p.name.toLowerCase() === decodeURIComponent(placeName).toLowerCase()
         );
         if (foundPlace) {
           setPlace({
             name: foundPlace.name,
             image: foundPlace.image,
             location: foundPlace.location,
-            tickets: {
-              children: foundPlace.price.includes("|") ? foundPlace.price.split("|")[0] : foundPlace.price,
-              adults: foundPlace.price.includes("|") ? foundPlace.price.split("|")[1] : foundPlace.price
-            },
-            times: {
-              weekday: foundPlace.time.includes("|") ? foundPlace.time.split("|")[0] : foundPlace.time,
-              weekend: foundPlace.time.includes("|") ? foundPlace.time.split("|")[1] : foundPlace.time
-            }
+            tickets: foundPlace.price,
+            times: foundPlace.time,
           });
         }
         setLoading(false);
@@ -44,6 +38,9 @@ export default function PlaceDetails() {
   if (loading) return <div>Loading place details...</div>;
   if (error) return <div>{error}</div>;
   if (!place) return <p className="text-center text-gray-500">Place not found.</p>;
+
+  // Create Google Maps URL from location string
+  const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.location)}`;
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -66,8 +63,7 @@ export default function PlaceDetails() {
             <img src="/assets/Ticket.jpg" alt="Tickets Icon" className="w-6 h-6" />
             Tickets
           </h2>
-          <p className="bg-gray-200 px-4 py-2 rounded mt-2">Children: {place.tickets.children}</p>
-          <p className="bg-gray-300 px-4 py-2 rounded mt-2">Adults: {place.tickets.adults}</p>
+          <p className="bg-gray-200 px-4 py-2 rounded mt-2">{place.tickets}</p>
         </div>
 
         <div className="bg-white p-6 rounded-lg shadow-lg text-center">
@@ -75,8 +71,7 @@ export default function PlaceDetails() {
             <img src="/assets/Opening.jpeg" alt="Opening Times Icon" className="w-6 h-6" />
             Opening Times
           </h2>
-          <p className="mt-2">Weekdays: {place.times.weekday}</p>
-          <p className="font-bold text-red-500">Weekends: {place.times.weekend}</p>
+          <p className="mt-2">{place.times}</p>
         </div>
 
         <div className="bg-white p-6 rounded-lg shadow-lg text-center">
@@ -84,7 +79,14 @@ export default function PlaceDetails() {
             <img src="/assets/Location.jpeg" alt="Location Icon" className="w-6 h-6" />
             Location
           </h2>
-          <p className="mt-2">{place.location}</p>
+          <a
+            href={googleMapsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 text-blue-500 hover:underline block"
+          >
+            {place.location}
+          </a>
         </div>
       </div>
     </div>
