@@ -47,6 +47,7 @@ import ScrollToTop from "./pages/ScrollToTop";
 import PlaceDetails from './pages/Places/PlaceDetails.jsx';
 import ProfileV from './pages/Profile/ProfileV.jsx';
 import CourseDetail from './pages/Education/CourseDetail.jsx';
+import Books from './pages/Entertainment/Books.jsx';
 const App = () => {
   return (<>
   <ScrollToTop />
@@ -98,6 +99,7 @@ const App = () => {
         <Route path="/places-to-go" element={<Places />} />
         <Route path="/PlaceDetails/:placeName" element={<PlaceDetails />} />
         <Route path="/profileV" element={<ProfileV/>} />
+        <Route path="/books" element={<Books/>} />
 
 
 

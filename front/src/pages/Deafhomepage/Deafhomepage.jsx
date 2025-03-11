@@ -7,7 +7,7 @@ const services = [
   { title: "Fast Emergency Service", image: "/assets/emergency-pic.png", link: "/emergency", bg: "bg-yellow-100" , description: "Quick access to emergency assistance for urgent situations.", imgSize: " w-48 h-48"},
   { title: "Text-To-Speech and vice versa", image: "/assets/live-traslator-pic.png", link: "/text-to-speech", bg: "bg-blue-100" , description: "Convert text to speech and speech to text with ease.", imgSize: "w-48 h-48"},
   { title: "Volunteer Assistance", image: "/assets/volunteer-help-pic.png", link: "/dailylife", bg: "bg-yellow-100", description: "Connect with volunteers who know sign language and are ready to help.", imgSize: "w-48 h-48" },
-  { title: "Education", image: "/assets/education-pic.png", link: "/education", bg: "bg-blue-100", description: "Access educational resources and courses for better learning.", imgSize: "w-48 h-48" },
+  { title: "Education", image: "/assets/education-pic.png", link: "/Courses", bg: "bg-blue-100", description: "Access courses for better learning.", imgSize: "w-48 h-48" },
   { title: "Job Opportunities", image: "/assets/job-opp-pic.png", link: "/jobs", bg: "bg-yellow-100", description: "Explore job opportunities tailored for the deaf community.", imgSize: "w-48 h-48" },
   { title: "Entertainment Services", image: "/assets/entertainment-pic.png", link: "/Entertainment-home", bg: "bg-blue-100", description: "Enjoy entertainment services accessible for the deaf.", imgSize: "w-48 h-48" },
   { title: " places recommendations", image: "/assets/places-pic.png", link: "/places-to-go", bg: "bg-yellow-100", description: "Discover deaf-friendly places", imgSize: "w-48 h-48" }
