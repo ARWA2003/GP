@@ -79,3 +79,8 @@ export const getPlaces = async () => {
   const response = await axios.get(`${API_URL}/places`);
   return response.data; // Return only the data array
 };
+
+export const getBooks = async () => {
+  const response = await axios.get(`${API_URL}/books`);
+  return response.data; // Return only the data array
+};

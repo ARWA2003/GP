@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
 import Upperbar from "../Upperbar";
 import Foooter from "../footer/footer";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getBooks } from "../../../api"; // Adjust the import path based on your file structure
 
 // Define the circle animation
 const circleAnimation = {
@@ -17,60 +18,32 @@ const circleAnimation = {
   },
 };
 
-const books = [
-  {
-    id: 1,
-    title: "El Deafo",
-    image:
-      "https://images-us.bookshop.org/ingram/9781419712173.jpg?height=500&v=v2-12989c393d0d9050fbca145799a44d08",
-    description:
-      "Cece Bell depicts what it feels like to grow up deaf in the mainstream education system as she grapples with the emotional consequences of being different from one’s peers. The book offers insights into the common assumptions that people make about deafness and provides young deaf readers a rare chance to see themselves represented in fiction.",
-    buyLink: "#",
-    downloadLink: "#",
-  },
-  {
-    id: 2,
-    title: "True Biz",
-    image: "https://images-us.bookshop.org/ingram/9780593241523.jpg?height=500&v=v2-b3ba5343331ec4c0cd7fc889be8ae076",
-    description:
-      "On the rare occasions that a deaf character features in fiction, they are often isolated figures, stranded in hearing society. In True Biz, Novic gives us the diversity of Deaf experience through a variety of characters who come together at a school for deaf students which is being threatened with closure. Novic paints an engaging, tender and passionate picture of contemporary Deaf culture, illuminating a range of issues that affect deaf people today, while paying homage to the school’s central role in Deaf history.",
-    buyLink: "#",
-    downloadLink: "#",
-  },
-  {
-    id: 3,
-    title: "Book 3",
-    image: "https://via.placeholder.com/150",
-    description:
-      "Book 3 is an engaging story that captures the reader’s attention through well-crafted narratives and compelling characters.",
-    buyLink: "#",
-    downloadLink: "#",
-  },
-  {
-    id: 4,
-    title: "Book 3",
-    image: "https://via.placeholder.com/150",
-    description:
-      "Book 3 is an engaging story that captures the reader’s attention through well-crafted narratives and compelling characters.",
-    buyLink: "#",
-    downloadLink: "#",
-  },
-  {
-    id: 5,
-    title: "Book 3",
-    image: "https://via.placeholder.com/150",
-    description:
-      "Book 3 is an engaging story that captures the reader’s attention through well-crafted narratives and compelling characters.",
-    buyLink: "#",
-    downloadLink: "#",
-  },
-];
-
 const Books = () => {
+  const [books, setBooks] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
+  // Fetch books from the backend when the component mounts
+  useEffect(() => {
+    const fetchBooks = async () => {
+      setLoading(true);
+      try {
+        const bookData = await getBooks(); // Call the API function
+        setBooks(bookData);
+      } catch (err) {
+        setError("Failed to load books. Please try again later.");
+        console.error("Error fetching books:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBooks();
+  }, []);
+
+  // Filter books based on search term
   const filteredBooks = books.filter((book) =>
-    book.title.toLowerCase().includes(searchTerm.toLowerCase())
+    book.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -101,29 +74,33 @@ const Books = () => {
 
         {/* Books Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-[90%] max-w-6xl z-[1]">
-          {filteredBooks.length > 0 ? (
+          {loading ? (
+            <p className="text-gray-600">Loading books...</p>
+          ) : error ? (
+            <p className="text-red-600">{error}</p>
+          ) : filteredBooks.length > 0 ? (
             filteredBooks.map((book) => (
               <motion.div
-                key={book.id}
+                key={book._id} // Use _id from MongoDB instead of id
                 whileHover={{ scale: 1.05 }}
                 className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center text-center transition-transform"
               >
                 <img
                   src={book.image}
-                  alt={book.title}
+                  alt={book.name}
                   className="w-40 h-60 object-cover rounded-md mb-4"
                 />
-                <h3 className="text-lg font-semibold mb-2">{book.title}</h3>
+                <h3 className="text-lg font-semibold mb-2">{book.name}</h3>
                 <p className="text-gray-700 text-sm mb-4">{book.description}</p>
                 <div className="flex gap-4">
                   <a
-                    href={book.buyLink}
+                    href={book.buylink}
                     className="bg-yellow-400 hover:bg-yellow-500 text-black px-4 py-2 rounded-md transition"
                   >
                     Buy
                   </a>
                   <a
-                    href={book.downloadLink}
+                    href={book.downloadlink}
                     className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition"
                   >
                     Download

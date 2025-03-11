@@ -4,6 +4,7 @@ import { addChatMessage } from "../controllers/chatController.js";
 import { getChatHistory } from "../controllers/chatController.js";
 import { getJobs } from "../controllers/jobscontroller.js";
 import { getPlaces } from "../controllers/placescontroller.js";
+import { getBooks } from "../controllers/booksController.js";
 const router = express.Router();
 
 router.post("/contact", addContact);
@@ -15,5 +16,7 @@ router.post("/chat", addChatMessage);
 router.get("/chat", getChatHistory);
 router.get("/jobs", getJobs);
 router.get("/places", getPlaces);
+router.get("/books", getBooks);
+
 
 export default router; // ✅ Correct ES Module export
