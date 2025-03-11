@@ -74,3 +74,8 @@ export const getJobs = async () => {
   const response = await axios.get(`${API_URL}/jobs`);
   return response.data; // Return only the data array
 };
+
+export const getPlaces = async () => {
+  const response = await axios.get(`${API_URL}/places`);
+  return response.data; // Return only the data array
+};

@@ -3,6 +3,7 @@ import { addContact, getContacts, updateContact, deleteContact } from "../contro
 import { addChatMessage } from "../controllers/chatController.js";
 import { getChatHistory } from "../controllers/chatController.js";
 import { getJobs } from "../controllers/jobscontroller.js";
+import { getPlaces } from "../controllers/placescontroller.js";
 const router = express.Router();
 
 router.post("/contact", addContact);
@@ -13,4 +14,6 @@ router.post("/chat", addChatMessage);
 // Get chat history for a contact
 router.get("/chat", getChatHistory);
 router.get("/jobs", getJobs);
+router.get("/places", getPlaces);
+
 export default router; // ✅ Correct ES Module export

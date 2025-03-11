@@ -1,24 +1,38 @@
-import { useState } from "react";
+// Places.js
+import { useState, useEffect } from "react";
 import { FiSearch } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import Upperbar from "../Upperbar";
 import Foooter from "../footer/footer";
+import { getPlaces } from "../../../api"; // Adjust path to your API file
 
 export default function Places() {
   const [search, setSearch] = useState("");
+  const [places, setPlaces] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const places = [
-    { name: "Al Azhar Park", image: "/assets/places/places2.jpeg", category: "Parks" },
-    { name: "Library of Alexandria", image: "/assets/places/places5.jpeg", category: "Education" },
-    { name: "Guiza Pyramids", image: "/assets/places/places3.jpeg", category: "Historical" },
-    { name: "Wadi Degla Protectorate", image: "/assets/places/places4.jpeg", category: "Sports" },
-    { name: "Al Muizz Street", image: "/assets/places/places1.jpeg", category: "Historical" },
-  ];
+  useEffect(() => {
+    const fetchPlaces = async () => {
+      try {
+        const placesData = await getPlaces();
+        setPlaces(placesData);
+        setLoading(false);
+      } catch (err) {
+        setError("Failed to fetch places: " + err.message);
+        setLoading(false);
+      }
+    };
+    fetchPlaces();
+  }, []);
 
   const filteredPlaces = places.filter(place =>
     place.name.toLowerCase().includes(search.toLowerCase())
   );
+
+  if (loading) return <div>Loading places...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <div>
@@ -64,9 +78,9 @@ export default function Places() {
         <h2 className="text-2xl font-bold">Most featured places</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
           {filteredPlaces.length > 0 ? (
-            filteredPlaces.map((place, index) => (
+            filteredPlaces.map((place) => (
               <div
-                key={index}
+                key={place._id} // Using _id from MongoDB
                 className="bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer hover:shadow-xl transition-shadow duration-300"
                 onClick={() => navigate(`/PlaceDetails/${encodeURIComponent(place.name)}`)}
               >
