@@ -39,8 +39,10 @@ export default function PlaceDetails() {
   if (error) return <div>{error}</div>;
   if (!place) return <p className="text-center text-gray-500">Place not found.</p>;
 
-  // Create Google Maps URL from location string
-  const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.location)}`;
+  // Create a more specific Google Maps URL by combining place name and location
+  const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+    `${place.name}, ${place.location}`
+  )}`;
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -80,13 +82,14 @@ export default function PlaceDetails() {
             Location
           </h2>
           <a
-            href={googleMapsUrl}
+            href={place.location}
             target="_blank"
             rel="noopener noreferrer"
             className="mt-2 text-blue-500 hover:underline block"
           >
-            {place.location}
+           {place.location}
           </a>
+    
         </div>
       </div>
     </div>
