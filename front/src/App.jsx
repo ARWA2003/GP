@@ -15,9 +15,13 @@ import Education from './pages/Education/Education.jsx';
 import DeafVolunteerAssistance from './pages/DeafVolunteerAssistance/DeafVolunteerAssistance.jsx';
 import Reels from './pages/Entertainment/Reels.jsx';
 import ShortMovies from './pages/Entertainment/ShortM.jsx';
-import JobPortal from './pages/Jobs/JobPortal.jsx';
-import Careers from './pages/Jobs/Careers.jsx';
-import JobDetails from './pages/Jobs/JobDetails.jsx';
+import Banking from './pages/Jobs/Banking.jsx';
+import Writing from './pages/Jobs/Writing.jsx';
+import Design from './pages/Jobs/Design.jsx';
+import IT from './pages/Jobs/IT.jsx';
+import Business from './pages/Jobs/Business.jsx';
+import Finance from './pages/Jobs/Finance.jsx';
+import JobCategories from './pages/Jobs/JobCategories.jsx';
 import Profile from './pages/Profile/Profile.jsx';
 import EntV from './pages/Entertainment/EntV.jsx';
 import Etools from './pages/Education/Etools.jsx';
@@ -66,9 +70,13 @@ const App = () => {
       <Route path="/DeafVolunteerAssistance" element={<DeafVolunteerAssistance />} />
       <Route path="/Reels" element={<Reels />} />
       <Route path="/ShortMovies" element={<ShortMovies />} />
-      <Route path="/jobs" element={<JobPortal/>}/>
-      <Route path="/careers" element={<Careers/>}/>
-      <Route path="/job-details" element={<JobDetails/>}/>
+      <Route path="/job-categories" element={<JobCategories/>}/>
+      <Route path="/banking" element={<Banking />} />
+        <Route path="/finance" element={<Finance />} />
+        <Route path="/business" element={<Business />} />
+        <Route path="/design" element={<Design />} />
+        <Route path="/writing" element={<Writing />} />
+        <Route path="/it" element={<IT />} />
       <Route path="/profile" element={<Profile/>}/>
       <Route path="/Entertainment-vid" element={<EntV />} />
       <Route path="/Etools" element={<Etools />} />
