@@ -29,7 +29,7 @@ JobCard.propTypes = {
     Company: PropTypes.string.isRequired,
     Location: PropTypes.string.isRequired,
     "Job Type": PropTypes.string.isRequired,
-    Workplace: PropTypes.string.isRequired,
+    "Workplace": PropTypes.string.isRequired,
     Experience: PropTypes.string,
     "Job Link": PropTypes.string.isRequired,
   }).isRequired,

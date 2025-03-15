@@ -9,7 +9,7 @@ function JobCard({ job }) {
       <h2 className="text-xl font-bold">{job["Job Title"]}</h2>
       <p className="text-sm">{job["Company"]}</p>
       <p>{job["Location"]}</p>
-      <p>{job["Job Type"]} - {job["Workplace"]}</p>
+      <p>{job["Job Type"]} - {job["Work Mode"]}</p>
       <p>Experience: {job["Experience"] || "Not specified"}</p>
       <a
         href={job["Job Link"]}
@@ -29,7 +29,7 @@ JobCard.propTypes = {
     Company: PropTypes.string.isRequired,
     Location: PropTypes.string.isRequired,
     "Job Type": PropTypes.string.isRequired,
-    Workplace: PropTypes.string.isRequired,
+    "Work Mode": PropTypes.string.isRequired,
     Experience: PropTypes.string,
     "Job Link": PropTypes.string.isRequired,
   }).isRequired,
