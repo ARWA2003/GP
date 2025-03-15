@@ -84,3 +84,13 @@ export const getBooks = async () => {
   const response = await axios.get(`${API_URL}/books`);
   return response.data; // Return only the data array
 };
+
+export const getBank = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/bankjob`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching bank jobs:", error);
+    throw error; // Let the caller handle the error
+  }
+};
