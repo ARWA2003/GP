@@ -53,7 +53,7 @@ import ProfileV from './pages/Profile/ProfileV.jsx';
 import CourseDetail from './pages/Education/CourseDetail.jsx';
 import Books from './pages/Entertainment/Books.jsx';
 import EmergencyForm from './pages/EmergencyFeature/EmergencyForm.jsx';
-import JobListings from './pages/Jobs/Careers.jsx';
+// import JobListings from './pages/Jobs/Careers.jsx';
 const App = () => {
   return (<>
   <ScrollToTop />
