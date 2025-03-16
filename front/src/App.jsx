@@ -52,6 +52,8 @@ import PlaceDetails from './pages/Places/PlaceDetails.jsx';
 import ProfileV from './pages/Profile/ProfileV.jsx';
 import CourseDetail from './pages/Education/CourseDetail.jsx';
 import Books from './pages/Entertainment/Books.jsx';
+import EmergencyForm from './pages/EmergencyFeature/EmergencyForm.jsx';
+import JobListings from './pages/Jobs/Careers.jsx';
 const App = () => {
   return (<>
   <ScrollToTop />
@@ -72,7 +74,9 @@ const App = () => {
       <Route path="/DeafVolunteerAssistance" element={<DeafVolunteerAssistance />} />
       <Route path="/Reels" element={<Reels />} />
       <Route path="/ShortMovies" element={<ShortMovies />} />
+      {/* <Route path="/job-categories" element={<JobListings/>}/> */}
       <Route path="/job-categories" element={<JobCategories/>}/>
+
       <Route path="/banking" element={<Banking />} />
         <Route path="/finance" element={<Finance />} />
         <Route path="/business" element={<Business />} />
@@ -108,6 +112,8 @@ const App = () => {
         <Route path="/PlaceDetails/:placeName" element={<PlaceDetails />} />
         <Route path="/profileV" element={<ProfileV/>} />
         <Route path="/books" element={<Books/>} />
+        <Route path="/emergency" element={<EmergencyForm/>} />
+
 
 
 
