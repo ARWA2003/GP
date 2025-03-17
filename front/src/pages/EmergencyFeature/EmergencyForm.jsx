@@ -50,8 +50,8 @@ const EmergencyForm = () => {
     building: '',
     apartment: '',
     userInfo: {
-      name: 'Mohamed Hossam',
-      phone: '010XXXXXXXXXX',
+      name: 'Engy Mohamed',
+      phone: '11111111111',
       bloodType: 'A+',
       allergies: 'no allergies, asthma',
     },

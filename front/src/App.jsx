@@ -53,6 +53,7 @@ import ProfileV from './pages/Profile/ProfileV.jsx';
 import CourseDetail from './pages/Education/CourseDetail.jsx';
 import Books from './pages/Entertainment/Books.jsx';
 import EmergencyForm from './pages/EmergencyFeature/EmergencyForm.jsx';
+import ChatInGroup from './pages/ChatInGroup/ChatInGroup.jsx';
 // import JobListings from './pages/Jobs/Careers.jsx';
 const App = () => {
   return (<>
@@ -113,6 +114,8 @@ const App = () => {
         <Route path="/profileV" element={<ProfileV/>} />
         <Route path="/books" element={<Books/>} />
         <Route path="/emergency" element={<EmergencyForm/>} />
+        <Route path="/ChatInGroup" element={<ChatInGroup/>} />
+
 
 
 
