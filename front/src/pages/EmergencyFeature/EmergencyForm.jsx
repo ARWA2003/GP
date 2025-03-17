@@ -1,13 +1,54 @@
-import { useState } from 'react';
 import { FaAmbulance, FaFire, FaPhone, FaCarCrash, FaHeartbeat, FaLungs, FaBolt, FaUserInjured, FaShieldAlt, FaFireAlt, FaHandHoldingWater, FaFemale, FaRunning, FaBan } from 'react-icons/fa';
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const EmergencyForm = () => {
+  useEffect(() => {
+    const fetchAddress = async (latitude, longitude) => {
+      const apiKey = "d98fb63bd1944bcea0f73eb08524133c"; // Replace with your OpenCage API key
+      try {
+        const response = await axios.get(
+          `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${apiKey}`
+        );
+        const address = response.data.results[0]?.formatted || "Address unavailable";
+        setFormData((prevData) => ({ ...prevData, location: address }));
+      } catch (error) {
+        console.error("Error fetching address:", error);
+        setFormData((prevData) => ({
+          ...prevData,
+          location: "Failed to get address",
+        }));
+      }
+    };
+  
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          fetchAddress(latitude, longitude);
+        },
+        (error) => {
+          console.error("Error getting location:", error);
+          setFormData((prevData) => ({
+            ...prevData,
+            location: "Location unavailable",
+          }));
+        }
+      );
+    } else {
+      console.error("Geolocation not supported");
+      setFormData((prevData) => ({
+        ...prevData,
+        location: "Geolocation not supported",
+      }));
+    }
+  }, []);
+  
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     location: 'location',
-    floor: 9,
-    building: 90,
-    apartment: 20,
+    building: '',
+    apartment: '',
     userInfo: {
       name: 'Mohamed Hossam',
       phone: '010XXXXXXXXXX',
@@ -17,10 +58,10 @@ const EmergencyForm = () => {
     emergencyType: [],
     additionalDetails: [],
     questions: {
-      alone: '',
-      weapons: '',
-      hurt: '',
-      abuser: '',
+      alone: { question: "Are you alone?", answer: '' },
+      weapons: { question: "Are there any weapons involved?", answer: '' },
+      hurt: { question: "Are you hurt?", answer: '' },
+      abuser: { question: "Is there an abuser next to you?", answer: '' },
     },
     extraDetails: '',
   });
@@ -33,10 +74,13 @@ const EmergencyForm = () => {
     nextStep();
   };
 
-  const handleQuestions = (question, value) => {
+  const handleQuestions = (questionKey, value) => {
     setFormData({
       ...formData,
-      questions: { ...formData.questions, [question]: value },
+      questions: {
+        ...formData.questions,
+        [questionKey]: { ...formData.questions[questionKey], answer: value }
+      },
     });
   };
 
@@ -54,6 +98,11 @@ const EmergencyForm = () => {
     }
   };
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
   const handleExtraDetails = (e) => {
     setFormData({ ...formData, extraDetails: e.target.value });
   };
@@ -66,6 +115,30 @@ const EmergencyForm = () => {
             <h2 className="text-4xl font-bold text-red-600 mb-6">EMERGENCY CASE</h2>
             <p className="text-lg text-gray-700 mb-4">{formData.location}</p>
             <button className="bg-red-500 text-white px-6 py-3 rounded mb-6 w-fit">EDIT</button>
+            <div className="mb-6 grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-lg font-semibold mb-2">Building Number</label>
+                <input
+                  type="text"
+                  name="building"
+                  value={formData.building}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border-2 border-red-500 rounded-lg"
+                  placeholder="Enter building number"
+                />
+              </div>
+              <div>
+                <label className="block text-lg font-semibold mb-2">Apartment Number</label>
+                <input
+                  type="text"
+                  name="apartment"
+                  value={formData.apartment}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border-2 border-red-500 rounded-lg"
+                  placeholder="Enter apartment number"
+                />
+              </div>
+            </div>
             <h3 className="text-2xl font-semibold mb-6">select emergency service</h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
               <button
@@ -102,14 +175,14 @@ const EmergencyForm = () => {
         return (
           <div className="p-6 flex-1 flex flex-col">
             <div className="mb-6">
-              <h3 className="text-2xl font-semibold text-red-600">Are you alone?</h3>
+              <h3 className="text-2xl font-semibold text-red-600">{formData.questions.alone.question}</h3>
               <div className="flex gap-4 mt-4">
                 {['yes', 'no', 'not sure'].map((option) => (
                   <button
                     key={option}
                     onClick={() => handleQuestions('alone', option)}
                     className={`px-6 py-3 rounded-lg text-lg ${
-                      formData.questions.alone === option ? 'bg-red-500 text-white' : 'bg-red-200 text-red-700'
+                      formData.questions.alone.answer === option ? 'bg-red-500 text-white' : 'bg-red-200 text-red-700'
                     }`}
                   >
                     {option}
@@ -118,14 +191,14 @@ const EmergencyForm = () => {
               </div>
             </div>
             <div className="mb-6">
-              <h3 className="text-2xl font-semibold text-red-600">Are there any weapons involved?</h3>
+              <h3 className="text-2xl font-semibold text-red-600">{formData.questions.weapons.question}</h3>
               <div className="flex gap-4 mt-4">
                 {['yes', 'no', 'not sure'].map((option) => (
                   <button
                     key={option}
                     onClick={() => handleQuestions('weapons', option)}
                     className={`px-6 py-3 rounded-lg text-lg ${
-                      formData.questions.weapons === option ? 'bg-red-500 text-white' : 'bg-red-200 text-red-700'
+                      formData.questions.weapons.answer === option ? 'bg-red-500 text-white' : 'bg-red-200 text-red-700'
                     }`}
                   >
                     {option}
@@ -134,14 +207,14 @@ const EmergencyForm = () => {
               </div>
             </div>
             <div className="mb-6">
-              <h3 className="text-2xl font-semibold text-red-600">Are you hurt?</h3>
+              <h3 className="text-2xl font-semibold text-red-600">{formData.questions.hurt.question}</h3>
               <div className="flex gap-4 mt-4">
                 {['yes', 'no', 'someone else is hurt'].map((option) => (
                   <button
                     key={option}
                     onClick={() => handleQuestions('hurt', option)}
                     className={`px-6 py-3 rounded-lg text-lg ${
-                      formData.questions.hurt === option ? 'bg-red-500 text-white' : 'bg-red-200 text-red-700'
+                      formData.questions.hurt.answer === option ? 'bg-red-500 text-white' : 'bg-red-200 text-red-700'
                     }`}
                   >
                     {option}
@@ -150,14 +223,14 @@ const EmergencyForm = () => {
               </div>
             </div>
             <div className="mb-6">
-              <h3 className="text-2xl font-semibold text-red-600">Is there an abuser next to you?</h3>
+              <h3 className="text-2xl font-semibold text-red-600">{formData.questions.abuser.question}</h3>
               <div className="flex gap-4 mt-4">
                 {['yes', 'no', 'not sure'].map((option) => (
                   <button
                     key={option}
                     onClick={() => handleQuestions('abuser', option)}
                     className={`px-6 py-3 rounded-lg text-lg ${
-                      formData.questions.abuser === option ? 'bg-red-500 text-white' : 'bg-red-200 text-red-700'
+                      formData.questions.abuser.answer === option ? 'bg-red-500 text-white' : 'bg-red-200 text-red-700'
                     }`}
                   >
                     {option}
@@ -246,9 +319,8 @@ const EmergencyForm = () => {
               <div className="bg-red-500 text-white p-6 rounded-lg">
                 <h3 className="text-2xl font-semibold">LOCATION</h3>
                 <p className="text-lg">{formData.location}</p>
-                <p className="text-lg">floor: {formData.floor}</p>
-                <p className="text-lg">building: {formData.building}</p>
-                <p className="text-lg">apartment: {formData.apartment}</p>
+                <p className="text-lg">building: {formData.building || 'Not specified'}</p>
+                <p className="text-lg">apartment: {formData.apartment || 'Not specified'}</p>
               </div>
               <div className="bg-red-500 text-white p-6 rounded-lg">
                 <h3 className="text-2xl font-semibold">INFO</h3>
@@ -259,11 +331,20 @@ const EmergencyForm = () => {
               </div>
               <div className="bg-red-500 text-white p-6 rounded-lg sm:col-span-2">
                 <h3 className="text-2xl font-semibold">EMERGENCY</h3>
-                <p className="text-lg">{formData.emergencyType.join(', ')}</p>
-                <p className="text-lg">
-                  {formData.additionalDetails.join(', ')}, {Object.values(formData.questions).join(', ')},{' '}
-                  {formData.extraDetails}
-                </p>
+                <p className="text-lg">Type: {formData.emergencyType.join(', ')}</p>
+                <p className="text-lg">Additional Details: {formData.additionalDetails.join(', ')}</p>
+                <div className="mt-2">
+                  {Object.values(formData.questions).map((q, index) => (
+                    q.answer && (
+                      <p key={index} className="text-lg">
+                        {q.question}: {q.answer}
+                      </p>
+                    )
+                  ))}
+                </div>
+                {formData.extraDetails && (
+                  <p className="text-lg mt-2">Extra Details: {formData.extraDetails}</p>
+                )}
               </div>
             </div>
             <div className="mt-auto flex justify-center">
