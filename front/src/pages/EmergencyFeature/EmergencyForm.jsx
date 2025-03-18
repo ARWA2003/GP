@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 const EmergencyForm = () => {
+  const [coordinates, setCoordinates] = useState({ lat: null, lon: null });
+
   useEffect(() => {
     const fetchAddress = async (latitude, longitude) => {
       const apiKey = "d98fb63bd1944bcea0f73eb08524133c";
@@ -12,6 +14,7 @@ const EmergencyForm = () => {
         );
         const address = response.data.results[0]?.formatted || "Address unavailable";
         setFormData((prevData) => ({ ...prevData, location: address }));
+        setCoordinates({ lat: latitude, lon: longitude });
       } catch (error) {
         console.error("Error fetching address:", error);
         setFormData((prevData) => ({
@@ -45,7 +48,7 @@ const EmergencyForm = () => {
   }, []);
 
   const [step, setStep] = useState(1);
-  const [callState, setCallState] = useState('convert'); // 'convert', 'calling', 'completed'
+  const [callState, setCallState] = useState('convert');
   const [formData, setFormData] = useState({
     location: 'location',
     building: '',
@@ -67,7 +70,6 @@ const EmergencyForm = () => {
     extraDetails: '',
   });
 
-  // Handle automatic call progression in step 6
   useEffect(() => {
     if (step === 6) {
       const convertTimer = setTimeout(() => {
@@ -126,13 +128,36 @@ const EmergencyForm = () => {
     setFormData({ ...formData, extraDetails: e.target.value });
   };
 
+  const getMapUrl = () => {
+    if (coordinates.lat && coordinates.lon) {
+      return `https://www.openstreetmap.org/export/embed.html?bbox=${coordinates.lon - 0.01},${coordinates.lat - 0.01},${coordinates.lon + 0.01},${coordinates.lat + 0.01}&marker=${coordinates.lat},${coordinates.lon}`;
+    }
+    return null;
+  };
+
   const renderStep = () => {
     switch (step) {
       case 1:
         return (
           <div className="p-6 flex-1 flex flex-col">
             <h2 className="text-4xl font-bold text-red-600 mb-6">EMERGENCY CASE</h2>
-            <p className="text-lg text-gray-700 mb-4">{formData.location}</p>
+            <p className="text-lg text-gray-700 mb-2">{formData.location}</p>
+            {coordinates.lat && coordinates.lon ? (
+              <div className="mb-4 w-full h-64">
+                <iframe
+                  width="100%"
+                  height="100%"
+                  frameBorder="0"
+                  scrolling="no"
+                  marginHeight="0"
+                  marginWidth="0"
+                  src={getMapUrl()}
+                  className="rounded-lg"
+                />
+              </div>
+            ) : (
+              <p className="text-sm text-gray-500 mb-4">Map unavailable</p>
+            )}
             <button className="bg-red-500 text-white px-6 py-3 rounded mb-6 w-fit">EDIT</button>
             <div className="mb-6 grid grid-cols-2 gap-4">
               <div>
@@ -338,7 +363,23 @@ const EmergencyForm = () => {
               <div className="bg-red-500 text-white p-6 rounded-lg">
                 <h3 className="text-2xl font-semibold">LOCATION</h3>
                 <p className="text-lg">{formData.location}</p>
-                <p className="text-lg">building: {formData.building || 'Not specified'}</p>
+                {coordinates.lat && coordinates.lon ? (
+                  <div className="mt-4 w-full h-48">
+                    <iframe
+                      width="100%"
+                      height="100%"
+                      frameBorder="0"
+                      scrolling="no"
+                      marginHeight="0"
+                      marginWidth="0"
+                      src={getMapUrl()}
+                      className="rounded-lg"
+                    />
+                  </div>
+                ) : (
+                  <p className="text-sm mt-2">Map unavailable</p>
+                )}
+                <p className="text-lg mt-2">building: {formData.building || 'Not specified'}</p>
                 <p className="text-lg">apartment: {formData.apartment || 'Not specified'}</p>
               </div>
               <div className="bg-red-500 text-white p-6 rounded-lg">
