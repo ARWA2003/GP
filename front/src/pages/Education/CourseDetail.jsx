@@ -26,8 +26,12 @@ const CourseDetail = () => {
     {
       title: "Data Science",
       courses: [
-        { title: "Data Science 101", description: "Introduction to Data Science with subtitles and sign language", link: "https://example.com/data-science-101" },
-        { title: "Advanced Data Analysis", description: "Advanced techniques in Data Science", link: "https://example.com/advanced-data-analysis" },
+        { title: "Computer Science for Python Programming", description: "An introduction to programming using Python, a popular language for general-purpose programming, data science, web programming, and more.", link: "https://www.edx.org/certificates/professional-certificate/harvardx-computer-science-for-python-programming?index=product&queryId=2d0ffc38a60904acea9315c5e77d605c&position=1&correlationId=ad44b181-5872-4b17-9c68-6ba0c9146e0c" },
+        { title: "HarvardX: Data Science: Machine Learning", description: "Build a movie recommendation system and learn the science behind one of the most popular and successful data science techniques.", link: "https://www.edx.org/learn/machine-learning/harvard-university-data-science-machine-learning?index=product&queryId=3654780be5adec0ac0fded6e82a00cba&position=2&correlationId=8ef276a0-1279-42a1-8d1e-50812ef6f507" },
+        { title: "University of Cape Town: Data Science with Python", description: "Gain meaningful insights from data to inform your decision making.", link: "https://www.edx.org/executive-education/university-of-cape-town-data-science-with-python?index=product&queryId=48e3a94d56d0b3da8581354795d13cf5&position=1&correlationId=ffe48f01-cb96-448e-9b22-1dc081650a5f" },
+        { title: "IBM: Python Basics for Data Science", description: "This Python course provides a beginner-friendly introduction to Python for Data Science. Practice through lab exercises, and you'll be ready to create your first Python scripts on your own!", link: "https://www.edx.org/learn/python/ibm-python-basics-for-data-science?index=product&queryId=a347875d935975112c3ee21c229f1e3a&position=10&correlationId=0c1c4619-e284-48aa-996f-b0d9949e333a" },
+        { title: "HarvardX: Data Science: Visualization", description: "Learn basic data visualization principles and how to apply them using ggplot2", link: "https://www.edx.org/learn/data-visualization/harvard-university-data-science-visualization?index=product&queryId=2566d6c5eb484552de6eba45eb62f26a&position=15&correlationId=cd5e4589-c724-4330-8fad-f0fec2187927" },
+
       ],
     },
     {
