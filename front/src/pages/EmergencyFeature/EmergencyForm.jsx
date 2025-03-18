@@ -5,7 +5,7 @@ import axios from "axios";
 const EmergencyForm = () => {
   useEffect(() => {
     const fetchAddress = async (latitude, longitude) => {
-      const apiKey = "d98fb63bd1944bcea0f73eb08524133c"; // Replace with your OpenCage API key
+      const apiKey = "d98fb63bd1944bcea0f73eb08524133c";
       try {
         const response = await axios.get(
           `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${apiKey}`
@@ -43,8 +43,9 @@ const EmergencyForm = () => {
       }));
     }
   }, []);
-  
+
   const [step, setStep] = useState(1);
+  const [callState, setCallState] = useState('convert'); // 'convert', 'calling', 'completed'
   const [formData, setFormData] = useState({
     location: 'location',
     building: '',
@@ -65,6 +66,24 @@ const EmergencyForm = () => {
     },
     extraDetails: '',
   });
+
+  // Handle automatic call progression in step 6
+  useEffect(() => {
+    if (step === 6) {
+      const convertTimer = setTimeout(() => {
+        setCallState('calling');
+      }, 3000);
+
+      const callTimer = setTimeout(() => {
+        setCallState('completed');
+      }, 6000);
+
+      return () => {
+        clearTimeout(convertTimer);
+        clearTimeout(callTimer);
+      };
+    }
+  }, [step]);
 
   const nextStep = () => setStep(step + 1);
   const prevStep = () => setStep(step - 1);
@@ -109,7 +128,7 @@ const EmergencyForm = () => {
 
   const renderStep = () => {
     switch (step) {
-      case 1: // Select Emergency Service
+      case 1:
         return (
           <div className="p-6 flex-1 flex flex-col">
             <h2 className="text-4xl font-bold text-red-600 mb-6">EMERGENCY CASE</h2>
@@ -171,7 +190,7 @@ const EmergencyForm = () => {
           </div>
         );
 
-      case 2: // Questions
+      case 2:
         return (
           <div className="p-6 flex-1 flex flex-col">
             <div className="mb-6">
@@ -249,7 +268,7 @@ const EmergencyForm = () => {
           </div>
         );
 
-      case 3: // Additional Details
+      case 3:
         return (
           <div className="p-6 flex-1 flex flex-col">
             <h2 className="text-3xl font-semibold mb-6">Additional details</h2>
@@ -290,7 +309,7 @@ const EmergencyForm = () => {
           </div>
         );
 
-      case 4: // Extra Details
+      case 4:
         return (
           <div className="p-6 flex-1 flex flex-col">
             <h2 className="text-3xl font-semibold mb-6">any extra detail you wanna add to call:</h2>
@@ -311,7 +330,7 @@ const EmergencyForm = () => {
           </div>
         );
 
-      case 5: // Summary
+      case 5:
         return (
           <div className="p-6 flex-1 flex flex-col">
             <h2 className="text-4xl font-bold mb-6">Summary</h2>
@@ -355,25 +374,31 @@ const EmergencyForm = () => {
           </div>
         );
 
-      case 6: // Call to 112
+      case 6:
         return (
           <div className="p-6 flex-1 flex flex-col">
             <h2 className="text-4xl font-bold mb-6">we are making your call to 112</h2>
             <div className="flex justify-around items-center mb-6">
               <div className="flex flex-col items-center">
-                <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center">
+                <div className={`w-16 h-16 rounded-full flex items-center justify-center ${
+                  callState === 'convert' ? 'bg-green-500' : 'bg-gray-200'
+                }`}>
                   <FaPhone className="text-3xl" />
                 </div>
                 <p className="text-lg mt-2">convert to speech</p>
               </div>
               <div className="flex flex-col items-center">
-                <div className="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center">
+                <div className={`w-16 h-16 rounded-full flex items-center justify-center ${
+                  callState === 'calling' ? 'bg-red-500' : 'bg-gray-200'
+                }`}>
                   <FaPhone className="text-3xl" />
                 </div>
                 <p className="text-lg mt-2">talking to 112</p>
               </div>
               <div className="flex flex-col items-center">
-                <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
+                <div className={`w-16 h-16 rounded-full flex items-center justify-center ${
+                  callState === 'completed' ? 'bg-green-500' : 'bg-gray-200'
+                }`}>
                   <FaPhone className="text-3xl" />
                 </div>
                 <p className="text-lg mt-2">call completed</p>
@@ -393,10 +418,17 @@ const EmergencyForm = () => {
                 <p className="text-lg text-center">Do not use the lifts in case of fire</p>
               </div>
             </div>
+            {callState === 'completed' && (
+              <div className="mt-6 flex justify-center">
+                <button onClick={nextStep} className="bg-red-500 text-white px-6 py-3 rounded text-lg">
+                  Continue
+                </button>
+              </div>
+            )}
           </div>
         );
 
-      case 7: // Help in the Way
+      case 7:
         return (
           <div className="p-6 flex-1 flex flex-col">
             <h2 className="text-4xl font-bold mb-6">Help in the way</h2>
