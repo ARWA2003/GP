@@ -3,25 +3,21 @@ import Foooter from "../footer/footer";
 import Upperbar from "../Upperbar";
 
 const ChatInGroup = () => {
-    const [contacts, setContacts] = useState(["Family Group", "Friends Group", "Work Group"]);
+    const [contacts, setContacts] = useState(["Friends Group", "Family Group", "Work Group"]);
     const [searchTerm, setSearchTerm] = useState("");
     const [newContact, setNewContact] = useState("");
     const [selectedContact, setSelectedContact] = useState(null);
     const [messages, setMessages] = useState({
-        "Family Group": [
-            { sender: "Mawada", text: "Hi everyone!", isVoice: false },
-            { sender: "Engy", text: "Hello!", isVoice: false },
-            { sender: "Arwa", text: "How are you all?", isVoice: false },
-        ],
         "Friends Group": [
-            { sender: "Doha", text: "What's up?", isVoice: false },
-            { sender: "Hasnaa", text: "Not much, just chilling.", isVoice: false },
-            { sender: "Mawada", text: "Let's plan a meetup!", isVoice: false },
+            { sender: "Arwa", text: "hello testing hear me out", isVoice: true },
+        ],
+        "Family Group": [
+          
         ],
         "Work Group": [
-            { sender: "Engy", text: "Let's discuss the project.", isVoice: false },
-            { sender: "Arwa", text: "Sure, let's set up a meeting.", isVoice: false },
-            { sender: "Doha", text: "I'll prepare the agenda.", isVoice: false },
+            // { sender: "Engy", text: "Let's discuss the project.", isVoice: false },
+            // { sender: "Arwa", text: "Sure, let's set up a meeting.", isVoice: false },
+            // { sender: "Doha", text: "I'll prepare the agenda.", isVoice: false },
         ],
     });
     const [inputText, setInputText] = useState("");
@@ -33,7 +29,7 @@ const ChatInGroup = () => {
     const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth > 768);
     const [selectedLanguage, setSelectedLanguage] = useState("en-US");
     const [speakerIndex, setSpeakerIndex] = useState(0);
-    const speakers = ["Arwa", "Mawada", "Engy"];
+    const speakers = [ "Mawada", "Engy"];
 
     useEffect(() => {
         const handleResize = () => setSidebarOpen(window.innerWidth > 768);
@@ -140,10 +136,22 @@ const ChatInGroup = () => {
                 ...prev,
                 [selectedContact]: [...(prev[selectedContact] || []), newMessage],
             }));
-            speakText(`${sender} says: ${inputText.trim()}`);
+    
+            // Assuming there's a way to determine if the sender's voice is Arabic
+            // This could be a property like sender.language or a function to detect language
+            const isArabic = sender.language === 'arabic' || detectArabic(inputText.trim());
+            const voiceVerb = isArabic ? 'تقول' : 'says';
+            
+            speakText(`${sender} ${voiceVerb}: ${inputText.trim()}`);
             setInputText("");
             setSpeakerIndex((prevIndex) => (prevIndex + 1) % speakers.length);
         }
+    };
+    
+    // Optional helper function to detect Arabic text
+    const detectArabic = (text) => {
+        const arabicRegex = /[\u0600-\u06FF]/;
+        return arabicRegex.test(text);
     };
 
     const handleAddContact = () => {
