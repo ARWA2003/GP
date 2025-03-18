@@ -1,45 +1,41 @@
 import { useState, useEffect } from "react";
 import Foooter from "../footer/footer";
 import Upperbar from "../Upperbar";
-import { getContacts, addContact, getChatHistory, addChatMessage, deleteContact } from "../../../api";
 
 const ChatInGroup = () => {
-    const [contacts, setContacts] = useState([]);
+    const [contacts, setContacts] = useState(["Family Group", "Friends Group", "Work Group"]);
     const [searchTerm, setSearchTerm] = useState("");
     const [newContact, setNewContact] = useState("");
     const [selectedContact, setSelectedContact] = useState(null);
-    const [messages, setMessages] = useState({});
+    const [messages, setMessages] = useState({
+        "Family Group": [
+            { sender: "Mawada", text: "Hi everyone!", isVoice: false },
+            { sender: "Engy", text: "Hello!", isVoice: false },
+            { sender: "Arwa", text: "How are you all?", isVoice: false },
+        ],
+        "Friends Group": [
+            { sender: "Doha", text: "What's up?", isVoice: false },
+            { sender: "Hasnaa", text: "Not much, just chilling.", isVoice: false },
+            { sender: "Mawada", text: "Let's plan a meetup!", isVoice: false },
+        ],
+        "Work Group": [
+            { sender: "Engy", text: "Let's discuss the project.", isVoice: false },
+            { sender: "Arwa", text: "Sure, let's set up a meeting.", isVoice: false },
+            { sender: "Doha", text: "I'll prepare the agenda.", isVoice: false },
+        ],
+    });
     const [inputText, setInputText] = useState("");
     const [selectedVoice, setSelectedVoice] = useState(null);
     const [voices, setVoices] = useState([]);
-    const [ setIsSpeaking] = useState(false);
+    const [setIsSpeaking] = useState(false);
     const [speechRate, setSpeechRate] = useState(1);
     const [isListening, setIsListening] = useState(false);
     const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth > 768);
     const [selectedLanguage, setSelectedLanguage] = useState("en-US");
+    const [speakerIndex, setSpeakerIndex] = useState(0);
+    const speakers = ["Arwa", "Mawada", "Engy"];
 
     useEffect(() => {
-        const fetchContacts = async () => {
-            try {
-                const response = await getContacts();
-                console.log("Backend Response (getContacts):", response.data);
-                const contactsArray = response.data.map((contact) =>
-                    contact.contactName || contact.name
-                );
-                setContacts(contactsArray);
-
-                const initialMessages = {};
-                contactsArray.forEach((contact) => {
-                    initialMessages[contact] = [];
-                });
-                setMessages(initialMessages);
-            } catch (error) {
-                console.error("Failed to fetch contacts:", error);
-            }
-        };
-
-        fetchContacts();
-
         const handleResize = () => setSidebarOpen(window.innerWidth > 768);
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
@@ -136,73 +132,42 @@ const ChatInGroup = () => {
         }
     };
 
-    const handleSendMessage = async () => {
+    const handleSendMessage = () => {
         if (inputText.trim() && selectedContact) {
-            const newMessage = { sender: "You", text: inputText.trim(), isVoice: true };
-            try {
-                await addChatMessage({ contactName: selectedContact, message: inputText.trim(), type: "speech" });
-                setMessages((prev) => ({
-                    ...prev,
-                    [selectedContact]: [...(prev[selectedContact] || []), newMessage],
-                }));
-                speakText(inputText.trim());
-                setInputText("");
-            } catch (error) {
-                console.error("Failed to send message:", error);
-            }
-        }
-    };
-
-    // const handleSearchChange = (e) => setSearchTerm(e.target.value);
-
-    const handleAddContact = async () => {
-        if (newContact.trim() !== "" && !contacts.includes(newContact.trim())) {
-            try {
-                const response = await addContact({ name: newContact.trim() });
-                console.log("Add Contact Response:", response.data);
-                const addedContactName = response.data.contact.contactName || response.data.contact.name || newContact.trim();
-                setContacts((prevContacts) => [...prevContacts, addedContactName]);
-                setMessages((prev) => ({ ...prev, [addedContactName]: [] }));
-                setNewContact("");
-            } catch (error) {
-                console.error("Failed to add contact:", error);
-            }
-        }
-    };
-
-    const handleSelectContact = async (contact) => {
-        setSelectedContact(contact);
-        try {
-            const response = await getChatHistory(contact);
-            console.log("Chat History Response:", response.data);
+            const sender = speakers[speakerIndex];
+            const newMessage = { sender, text: inputText.trim(), isVoice: true };
             setMessages((prev) => ({
                 ...prev,
-                [contact]: response.data.messages.map((msg) => ({
-                    sender: msg.sender || "Bot",
-                    text: msg.message,
-                    isVoice: msg.type === "speech",
-                })),
+                [selectedContact]: [...(prev[selectedContact] || []), newMessage],
             }));
-        } catch (error) {
-            console.error("Failed to fetch chat history:", error);
+            speakText(`${sender} says: ${inputText.trim()}`);
+            setInputText("");
+            setSpeakerIndex((prevIndex) => (prevIndex + 1) % speakers.length);
         }
     };
 
-    const handleDeleteContact = async (contact) => {
+    const handleAddContact = () => {
+        if (newContact.trim() !== "" && !contacts.includes(newContact.trim())) {
+            setContacts((prevContacts) => [...prevContacts, newContact.trim()]);
+            setMessages((prev) => ({ ...prev, [newContact.trim()]: [] }));
+            setNewContact("");
+        }
+    };
+
+    const handleSelectContact = (contact) => {
+        setSelectedContact(contact);
+    };
+
+    const handleDeleteContact = (contact) => {
         if (window.confirm(`Are you sure you want to delete ${contact}?`)) {
-            try {
-                await deleteContact(contact);
-                setContacts((prevContacts) => prevContacts.filter((c) => c !== contact));
-                setMessages((prev) => {
-                    const newMessages = { ...prev };
-                    delete newMessages[contact];
-                    return newMessages;
-                });
-                if (selectedContact === contact) {
-                    setSelectedContact(null);
-                }
-            } catch (error) {
-                console.error("Failed to delete contact:", error);
+            setContacts((prevContacts) => prevContacts.filter((c) => c !== contact));
+            setMessages((prev) => {
+                const newMessages = { ...prev };
+                delete newMessages[contact];
+                return newMessages;
+            });
+            if (selectedContact === contact) {
+                setSelectedContact(null);
             }
         }
     };
@@ -213,7 +178,7 @@ const ChatInGroup = () => {
 
     return (
         <>
-          <Upperbar/>
+            <Upperbar />
             <div className="min-h-screen flex flex-col bg-gradient-to-br from-yellow-400 via-blue-500 font-sans">
                 <div className="flex flex-1">
                     {/* Sidebar */}
@@ -316,7 +281,7 @@ const ChatInGroup = () => {
                                             <p className="text-gray-700">{msg.text}</p>
                                             {msg.isVoice && (
                                                 <button
-                                                    onClick={() => speakText(msg.text)}
+                                                    onClick={() => speakText(`${msg.sender} says: ${msg.text}`)}
                                                     className="text-sm text-yellow-500 mt-1 hover:underline"
                                                 >
                                                     🔊 Replay
