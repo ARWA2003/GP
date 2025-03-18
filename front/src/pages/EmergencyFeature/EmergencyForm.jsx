@@ -298,7 +298,7 @@ const EmergencyForm = () => {
           <div className="p-6 flex-1 flex flex-col">
             <h2 className="text-3xl font-semibold mb-6">Additional details</h2>
             <p className="text-lg text-gray-600 mb-6">select all that apply</p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
+            <div className="grid grid-cols- sm:grid-cols-1 md:grid-cols-2 gap-2">
               {[
                 { label: 'panic attack', icon: <FaHeartbeat /> },
                 { label: 'car accident', icon: <FaCarCrash /> },
@@ -450,7 +450,7 @@ const EmergencyForm = () => {
                 <FaRunning className="text-4xl mb-4" />
                 <p className="text-lg text-center">Evacuate to the safe area and do not stay in closed rooms</p>
               </div>
-              <div className="bg-gray-200 p-6 rounded-lg flex flex-col items-center">
+              <div className="bg-gray-200 p-6 rounded-lg flex flex-col items-center ">
                 <FaHandHoldingWater className="text-4xl mb-4" />
                 <p className="text-lg text-center">Use wet cloth/Stay low below the smoke to escape</p>
               </div>
