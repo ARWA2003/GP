@@ -23,7 +23,7 @@ const Upperbar = () => {
           {isServicesOpen && (
             <div className="absolute top-full left-0 bg-white shadow-lg rounded-md p-2 w-40">
               <Link to="/emergency" className="block px-4 py-2 hover:bg-gray-100">Emergency report</Link>
-              <Link to="/text-to-speech" className="block px-4 py-2 hover:bg-gray-100">Text to Speech trasnlator</Link>
+              <Link to="/transcription" className="block px-4 py-2 hover:bg-gray-100">transcription</Link>
               <Link to="/job-categories" className="block px-4 py-2 hover:bg-gray-100">Job Opportunities</Link>
               <Link to="/Courses" className="block px-4 py-2 hover:bg-gray-100">Education</Link>
               <Link to="/Entertainment-home" className="block px-4 py-2 hover:bg-gray-100">Entertainment</Link>
