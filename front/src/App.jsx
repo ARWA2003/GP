@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import DeafSignUp from './pages/DeafSignUp/deafsignuplogin';
 import Home from './pages/Home'; // Homepage with role selection
+import Chatbot from './pages/Chatbot.jsx'; 
 import DeafLogin from './pages/DeafSignUp/DeafLogin.jsx';
 import DeafForgotPassword from './pages/DeafSignUp/DeafForgotPassword.jsx';
 import VolunteerLogin from './pages/VolunteerSignUp/VolunteerLogin.jsx';
@@ -115,6 +116,7 @@ const App = () => {
         <Route path="/books" element={<Books/>} />
         <Route path="/emergency" element={<EmergencyForm/>} />
         <Route path="/ChatInGroup" element={<ChatInGroup/>} />
+         <Route path="/Chatbot" element={<Chatbot/>} />
 
 
 
