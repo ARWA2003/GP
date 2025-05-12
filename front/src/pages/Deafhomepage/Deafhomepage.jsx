@@ -5,10 +5,10 @@ import Foooter from "../footer/footer";
 
 const services = [
   { title: "Fast Emergency Service", image: "/assets/emergency-pic.png", link: "/emergency", bg: "bg-yellow-100" , description: "Quick access to emergency assistance for urgent situations.", imgSize: " w-48 h-48"},
-  { title: "Text-To-Speech and vice versa", image: "/assets/live-traslator-pic.png", link: "/text-to-speech", bg: "bg-blue-100" , description: "Convert text to speech and speech to text with ease.", imgSize: "w-48 h-48"},
-  { title: "Chat in a Group Setting", image: "../../../public/assets/chatingroup1.png", link: "/ChatInGroup", bg: "bg-yellow-100" , description: "include deaf users in group chats", imgSize: "w-48 h-48"},
+  { title: "Lecture Live Transcription", image: "../../../public/assets/lecture1.png", link: "/transcription", bg: "bg-blue-100" , description: "Live transcription for deaf students", imgSize: "w-48 h-48"},
 
-  { title: "Volunteer Assistance", image: "/assets/volunteer-help-pic.png", link: "/dailylife", bg: "bg-blue-100", description: "Connect with volunteers who know sign language and are ready to help.", imgSize: "w-48 h-48" },
+
+  // { title: "Volunteer Assistance", image: "/assets/volunteer-help-pic.png", link: "/dailylife", bg: "bg-blue-100", description: "Connect with volunteers who know sign language and are ready to help.", imgSize: "w-48 h-48" },
   { title: "Education", image: "/assets/education-pic.png", link: "/Courses", bg: "bg-yellow-100", description: "Access courses for better learning.", imgSize: "w-48 h-48" },
   { title: "Job Opportunities", image: "/assets/job-opp-pic.png", link: "/jobs", bg: "bg-blue-100", description: "Explore job opportunities tailored for the deaf community.", imgSize: "w-48 h-48" },
   { title: "Entertainment Services", image: "/assets/entertainment-pic.png", link: "/Entertainment-home", bg: "bg-yellow-100", description: "Enjoy entertainment services accessible for the deaf.", imgSize: "w-48 h-48" },

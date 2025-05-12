@@ -29,7 +29,7 @@ import Etools from './pages/Education/Etools.jsx';
 import Courses from './pages/Education/courses.jsx';
 import Careerhome from './pages/Education/Careerhome..jsx';
 import CareerResume from './pages/Education/Careerresume.jsx';
-import TextToSpeechPage from './pages/TextToSpeechPage/TextToSpeechPage.jsx';
+// import TextToSpeechPage from './pages/TextToSpeechPage/TextToSpeechPage.jsx';
 import ASLlevels from './pages/ASLlearning/ASLlevels.jsx';
 import Beg from './pages/ASLlearning/Beg.jsx';
 import Advanc from './pages/ASLlearning/Advan.jsx';
@@ -54,12 +54,14 @@ import ProfileV from './pages/Profile/ProfileV.jsx';
 import CourseDetail from './pages/Education/CourseDetail.jsx';
 import Books from './pages/Entertainment/Books.jsx';
 import EmergencyForm from './pages/EmergencyFeature/EmergencyForm.jsx';
-import ChatInGroup from './pages/ChatInGroup/ChatInGroup.jsx';
+import TranscriptionPage from './pages/TranscriptionPage/TranscriptionPage.jsx';
+
 // import JobListings from './pages/Jobs/Careers.jsx';
 const App = () => {
   return (<>
   <ScrollToTop />
     <Routes>
+
       <Route path="/" element={<Home />} />
       <Route path="/deaf-signup" element={<DeafSignUp />} />
       <Route path="/volunteer-signup" element={<VolunteerSignUp />} />
@@ -92,7 +94,6 @@ const App = () => {
       <Route path="/courses/:category" element={<CourseDetail />} />
       <Route path="/Careerhome" element={<Careerhome />} />
       <Route path="/Careercv" element={<CareerResume />} />
-      <Route path="/text-to-speech" element={<TextToSpeechPage />} />
       <Route path="/beginner" element={<Beg/>} />
       <Route path="/intermediate" element={<Inter />} />
       <Route path="/advanced" element={<Advanc />} />
@@ -115,11 +116,8 @@ const App = () => {
         <Route path="/profileV" element={<ProfileV/>} />
         <Route path="/books" element={<Books/>} />
         <Route path="/emergency" element={<EmergencyForm/>} />
-        <Route path="/ChatInGroup" element={<ChatInGroup/>} />
-         <Route path="/Chatbot" element={<Chatbot/>} />
-
-
-
+        <Route path="/transcription" element={<TranscriptionPage />} />
+        <Route path="/Chatbot" element={<Chatbot/>} />
 
 
 
