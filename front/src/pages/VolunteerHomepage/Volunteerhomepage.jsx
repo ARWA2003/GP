@@ -7,7 +7,7 @@ import UpperbarV from "../UpperbarV";
 const services = [
   { title: "ASL learning", image: "/assets/Vhome2.png", link: "/ASLlevels", bg: "bg-blue-100" , description: "", imgSize: "w-40 h-40"},
   { title: "Emergency Response", image: "/assets/Vhome5.png", link: "/EmerRes", bg: "bg-yellow-100", description: "", imgSize: "w-48 h-48" },
-  { title: "Help with Daily life: Chat/video call", image: "/assets/dailylifeneedsV.png", link: "/dailylifeV", bg: "bg-blue-100", description: "", imgSize: "w-48 h-48" },
+ 
 
   
 ];

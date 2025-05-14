@@ -24,6 +24,8 @@ const Upperbar = () => {
             <div className="absolute top-full left-0 bg-white shadow-lg rounded-md p-2 w-40">
               <Link to="/emergency" className="block px-4 py-2 hover:bg-gray-100">Emergency report</Link>
               <Link to="/transcription" className="block px-4 py-2 hover:bg-gray-100">Lecture Transcription</Link>
+              <Link to="/ChatBot" className="block px-4 py-2 hover:bg-gray-100">Mental Health ChatBot</Link>
+
               <Link to="/job-categories" className="block px-4 py-2 hover:bg-gray-100">Job Opportunities</Link>
               <Link to="/Courses" className="block px-4 py-2 hover:bg-gray-100">Education</Link>
               <Link to="/Entertainment-home" className="block px-4 py-2 hover:bg-gray-100">Entertainment</Link>

@@ -41,7 +41,7 @@ const ContactUs = () => {
   return (
     <>
    {userRole === "Deaf/Hard of Hearing" ? <Upperbar /> : userRole === "Volunteer" ? <UpperbarV /> : null}
-        <div className="relative min-h-screen bg-gray-100 flex items-center justify-center overflow-hidden">
+        <div className="relative min-h-screen bg-gray-200 flex items-center justify-center overflow-hidden">
       <div className="absolute w-[400px] h-[400px] bg-yellow-200 rounded-full top-[-150px] left-[-150px] shadow-lg flex items-center justify-center"></div>
       <div className="absolute w-[350px] h-[350px] bg-blue-500 rounded-full bottom-[-100px] right-[-100px]"></div>
       <div className="relative bg-gradient-to-r from-yellow-200 to-blue-500 p-8 rounded-lg shadow-lg z-10 max-w-3xl grid place-items-center">

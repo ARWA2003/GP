@@ -25,7 +25,7 @@ const UpperbarV = () => {
                       <div className="absolute top-full left-0 bg-white shadow-lg rounded-md p-2 w-40">
                         <Link to="/ASLlevels" className="block px-4 py-2 hover:bg-gray-100">ASL learning</Link>
                         <Link to="/EmerRes" className="block px-4 py-2 hover:bg-gray-100">Emergency responed</Link>
-                        <Link to="/dailylifeV" className="block px-4 py-2 hover:bg-gray-100">Daily needs</Link>
+                       
                       </div>
                     )}
                   </div>

@@ -3,7 +3,7 @@ import Foooter from "../footer/footer";
 import Upperbar from "../Upperbar";
 import { getContacts, addContact, getChatHistory, addChatMessage, deleteContact } from "../../../api";
 
-const TextToSpeechPage = () => {
+const TranscriptionPage = () => {
   const [contacts, setContacts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [newContact, setNewContact] = useState("");
@@ -304,28 +304,28 @@ const TextToSpeechPage = () => {
   return (
     <>
       <Upperbar />
-      <div className="min-h-screen flex flex-col bg-gray-100 font-sans">
+      <div className="min-h-screen flex flex-col bg-gradient-to-br from-yellow-300 to-blue-400 font-sans">
         <div className="flex flex-1">
           {/* Sidebar */}
           <div
-            className={`fixed md:relative ${sidebarOpen ? "w-64" : "w-0"} transition-all duration-300 overflow-hidden bg-white shadow-lg z-20 border-r border-gray-200`}
+            className={`fixed md:relative ${sidebarOpen ? "w-64" : "w-0"} transition-all duration-300 overflow-hidden bg-white shadow-lg z-20 border-r border-yellow-300`}
             aria-label="Lecture Transcripts"
           >
             {sidebarOpen && (
               <div className="p-4 h-full flex flex-col">
                 <button
                   onClick={() => setSidebarOpen(false)}
-                  className="self-end text-gray-600 hover:text-gray-800 transition-colors"
+                  className="self-end text-gray-600 hover:text-yellow-700 transition-colors"
                 >
                   ✕
                 </button>
-                <h2 className="text-lg font-semibold text-gray-800 mb-2">Lecture Transcripts</h2>
+                <h2 className="text-lg font-semibold text-yellow-700 mb-2">Lecture Transcripts</h2>
                 <input
                   type="text"
                   placeholder="Search lectures"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full p-2 mb-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-2 mb-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-500"
                 />
                 <div className="max-h-64 overflow-y-auto">
                   {filteredContacts.map((contact, index) => (
@@ -334,7 +334,7 @@ const TextToSpeechPage = () => {
                         onClick={() => handleSelectContact(contact)}
                         className={`flex-1 p-2 rounded text-left transition-colors ${
                           selectedContact === contact
-                            ? "bg-blue-100 text-blue-800"
+                            ? "bg-yellow-100 text-yellow-800"
                             : "bg-gray-50 text-gray-700 hover:bg-gray-100"
                         }`}
                       >
@@ -356,11 +356,11 @@ const TextToSpeechPage = () => {
                     placeholder="Add new lecture"
                     value={newContact}
                     onChange={(e) => setNewContact(e.target.value)}
-                    className="w-full p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-500"
                   />
                   <button
                     onClick={handleAddContact}
-                    className="w-full bg-blue-500 text-white p-2 rounded mt-1 hover:bg-blue-600 transition"
+                    className="w-full bg-yellow-500 text-white p-2 rounded mt-1 hover:bg-yellow-600 transition"
                   >
                     Add Lecture
                   </button>
@@ -383,7 +383,7 @@ const TextToSpeechPage = () => {
           <main className="flex-1 p-4 flex flex-col">
             {selectedContact ? (
               <>
-                <h2 className="text-xl font-semibold text-gray-800 mb-2">
+                <h2 className="text-xl font-semibold text-yellow-700 mb-2">
                   Transcription for {selectedContact}
                 </h2>
                 <div className="flex-1 bg-white p-3 rounded shadow mb-2">
@@ -422,7 +422,7 @@ const TextToSpeechPage = () => {
                     onClick={handleSendMessage}
                     disabled={!fullLectureTranscript.trim() && !inputText.trim()}
                     className={`px-2 py-1 rounded text-white ${
-                      fullLectureTranscript.trim() || inputText.trim() ? "bg-green-500 hover:bg-green-600" : "bg-green-300 cursor-not-allowed"
+                      fullLectureTranscript.trim() || inputText.trim() ? "bg-yellow-500 hover:bg-yellow-600" : "bg-yellow-300 cursor-not-allowed"
                     }`}
                   >
                     💾 Save Transcript
@@ -440,24 +440,11 @@ const TextToSpeechPage = () => {
                   <select
                     value={selectedLanguage}
                     onChange={(e) => setSelectedLanguage(e.target.value)}
-                    className="p-1 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="p-1 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-500"
                   >
                     <option value="en-US">English</option>
                     <option value="ar-SA">العربية (Arabic)</option>
                   </select>
-                  {/* <select
-                    value={selectedVoice?.name || ""}
-                    onChange={(e) =>
-                      setSelectedVoice(voices.find((v) => v.name === e.target.value))
-                    }
-                    className="p-1 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    {voices.map((voice) => (
-                      <option key={voice.name} value={voice.name}>
-                        {voice.name} ({voice.lang})
-                      </option>
-                    ))}
-                  </select> */}
                   <input
                     type="range"
                     min="0.5"
@@ -480,7 +467,7 @@ const TextToSpeechPage = () => {
                       setInputText(e.target.value);
                     }}
                     onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
-                    className="flex-1 p-1 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="flex-1 p-1 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-500"
                   />
                   <button
                     onClick={handleSendMessage}
@@ -499,7 +486,7 @@ const TextToSpeechPage = () => {
                     placeholder="Type to speak..."
                     value={studentSpeechText}
                     onChange={(e) => setStudentSpeechText(e.target.value)}
-                    className="flex-1 p-1 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="flex-1 p-1 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-500"
                   />
                   <button
                     onClick={handleStudentSpeak}
@@ -529,4 +516,4 @@ const TextToSpeechPage = () => {
   );
 };
 
-export default TextToSpeechPage;
+export default TranscriptionPage;
