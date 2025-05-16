@@ -17,13 +17,13 @@ const Entertainmenthome = () => {
       </div>
 
       <div className="max-w-5xl mx-auto py-12 flex flex-col md:flex-row gap-8 px-6">
-        <Link to="/Entertainment-vid" className="bg-yellow-400 p-6 rounded-lg shadow-md hover:shadow-xl transition transform hover:scale-105 flex-1 text-center">
+        {/* <Link to="/Entertainment-vid" className="bg-yellow-400 p-6 rounded-lg shadow-md hover:shadow-xl transition transform hover:scale-105 flex-1 text-center">
           <h2 className="text-3xl font-bold text-blue-700">Entertainment videos</h2>
           <p className="mt-2 text-gray-700">
             Dive into a collection of inspiring different videos crafted with American Sign Language (ASL).
           </p>
           <img src="/assets/entHome1.png" alt="Short Movies" className="mt-20 w-96 mx-auto" />
-        </Link>
+        </Link> */}
 
         <Link to="/books" className="bg-blue-600 p-6 rounded-lg shadow-md hover:shadow-xl transition transform hover:scale-105 flex-1 text-center">
           <h2 className="text-3xl font-bold text-yellow-500">Books</h2>
